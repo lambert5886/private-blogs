@@ -13,8 +13,11 @@
             <p class="des">
                 {{item.description}}
             </p>
-            <router-link :to="item.path">{{item.linkTitle}}</router-link>
+            <p class="link">
+                <router-link :to="item.path">{{item.linkTitle}}</router-link>
 
+            </p>
+            
 
         </div>
     </transition>
@@ -56,6 +59,7 @@ export default {
   margin-right: 10px;
   box-shadow: 0px 0px 0px #ccc;
   transition: box-shadow 1s;
+  padding-bottom: 10px;
 }
 .card-wrapper:hover{
     cursor: pointer;
@@ -94,6 +98,11 @@ h3{
     margin: auto;
     text-indent: 30px;
     text-overflow: ellipsis;
+}
+.link{
+    width: 90%;
+    margin: auto;
+    
 }
 </style>
 

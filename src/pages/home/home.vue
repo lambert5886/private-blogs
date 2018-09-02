@@ -19,7 +19,27 @@ export default {
         return {}
     },
     computed: {
+      
         cardLists(){
+            let _datas = {
+                    id: 12345,
+                    other: 'hhh'
+                };
+            this.axios({
+                method: 'post',
+                url:'http://localhost:8099/home',
+               data: _datas ,
+            }).then(function(res){
+                console.log(' 响应 >>> ', res);
+            })
+
+
+
+
+
+
+
+
             return [{
                 title: '标题标题',
                 description: '内容简介内容简介',

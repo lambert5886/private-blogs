@@ -7,11 +7,21 @@ import iView from 'iview'
 import '@/theme/index.less';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 Vue.use(VueRouter);
 Vue.use(iView);
-Vue.use(VueAxios, axios);
+Vue.use(VueAxios, axios, axios_instance);
 
 
+var axios_instance = axios.create({
+	
+		transformRequest: [function (data) {
+			data = Qs.stringify(data);
+			return data;
+		}],
+
+		headers:{'Content-Type':'application/x-www-form-urlencoded'}
+	})
 import router from  './router'
 import store from './store';
 import App from './app';
