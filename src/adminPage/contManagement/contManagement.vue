@@ -8,7 +8,7 @@
                 <Button type="warning" @click="articleEditor">修改</Button>
             </div>
             <div class="caozuo">
-                <Button type="error">删除</Button>
+                <Button type="error" @click="getArticle">删除</Button>
             </div>
 
             {{this.$route.params.id}}
@@ -46,6 +46,19 @@ export default {
       articleEditor(){
           this.$router.push({path: '/admin/contManagement/editor',});
           this.url = '/saveEditor';
+      },
+      getArticle(){
+          let params = {
+                  title: '123'
+              };
+
+          this.axios({
+              method: 'post',
+              url: 'http://localhost:8099/getArticle',
+              data: params,
+          }).then( (res) => {
+              console.log('请求的数据 >>>>  ',res);
+          })
       }
   },
   beforeRouteUpdate(to, from, next){

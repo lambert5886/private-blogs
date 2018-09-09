@@ -6,12 +6,10 @@
  const saveArticle = async (req, res,next) => {
     const opts =  req.body;
 
-    console.log('req  ', opts)
     const article = new articleSchema(opts);
 
     const saveArticle = await article.save();
 
-    console.log(saveArticle);
     if (saveArticle) {
         res.body = {
             success: true,
@@ -28,5 +26,22 @@
 
 };
 
-export {saveArticle}
+const getArticles = async (req, res, next) => {
+    const _data = await articleSchema.find({});
+    console.log('get data  ', _data)
+    if(_data){
+        res.body = {
+            success: true,
+            data: _data
+        }
+       
+    }else{
+        res.body = {
+            success: false,
+        }
+        
+    }
+}
+
+export {saveArticle, getArticles}
 

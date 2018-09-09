@@ -3,7 +3,7 @@ import bodyParser from 'body-parser'
 import graphqlHTTP from 'express-graphql'
 import {buildSchema} from 'graphql'
 
-import  {saveArticle}  from '../controllers'
+import  {saveArticle, getArticles}  from '../controllers'
 import   mongoose from 'mongoose' 
 
 import schema from '../glahplmodel/query';
@@ -16,10 +16,8 @@ app.use(bodyParser.json());
 app.use( bodyParser.urlencoded({extended: true }));
 
 var router = express.Router();
-
-console.log(' query >>>> ', schema)
  
-mongoose.connect('mongodb://localhost');
+mongoose.connect('mongodb://localhost:27017/private-blogs');
 
 app.all('*', function(req, res, next){
    // res.header("Content-Type", "application/json;charset=utf-8");
@@ -34,15 +32,22 @@ app.post('/home', function(req, res, next){
     next();
 });
  
-app.post('/saveAdd', (req, res, next) => {
+router.post('/saveAdd', (req, res, next) => {
     saveArticle(req, res);
-    res.send('OK !');
+    
     next(); 
 });
- 
+
+
+router.post('/getArticle', (req, res, next) => {
+    console.log(getArticles)
+    getArticles(req, res);
+    res.send();
+    next();
+})
 app.use('/graphql', graphqlHTTP({
     schema: schema,
-    rootValue: root,
+   
     graphiql: true,
 }));
   
