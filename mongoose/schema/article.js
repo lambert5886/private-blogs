@@ -1,7 +1,7 @@
+
 import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
-const ObjectId = Schema.Types.ObjectId;
 
 const articleSchema = new Schema({
     title: String,
@@ -20,14 +20,13 @@ const articleSchema = new Schema({
     }
 });
 
-articleSchema.pre('save', function(next){
+articleSchema.pre('save', next => {
     if (this.isNew) {
         this.meta.createdAt = this.meta.updatedAt = Date.now()
       } else {
         this.meta.updatedAt = Date.now()
       }
-    
-      next()
-});
-export default mongoose.model('article', articleSchema);
- 
+    next();
+})
+
+export default articleSchema;
