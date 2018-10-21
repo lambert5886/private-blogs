@@ -4,11 +4,12 @@ import {
   saveArticle,
   getArticles,
   getMenu,
-  saveMenu
+  saveMenu,
+  editMenu
 } from '../../controllers'
 const Router = express.Router();
 
-Router.post('/content/article', (req, res, next) => {
+Router.get('/content/article', (req, res, next) => {
 
   let _datas = getArticles(req, res);
   _datas.then(function (result) {
@@ -20,8 +21,11 @@ Router.post('/content/article', (req, res, next) => {
     }
     next();
 
+  }, (err) => {
+    console.log(' edit menu >>>  ',err)
   })
 });
+ 
 
 Router.post('/content/saveArticle', (req, res, next) => {
   let _ret = saveArticle(req, res);
@@ -63,6 +67,22 @@ Router.get('/menu/getMenu', (req, res, next) => {
 
     next()
   })
+});
+
+Router.post('/menu/editMenu', (req, res, next) => {
+  let _menuItem = editMenu(req, res);
+     _menuItem.then( result => {
+       if(result) {
+         res.json({
+           success: true,
+           data: result
+         })
+       };
+       next();
+     }, (err) => {
+     
+       next();
+     })
 })
 
 export default Router;

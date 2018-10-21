@@ -28,10 +28,7 @@ app.all('*', function(req, res, next){
 
     next();
 });
-app.post('/home', function(req, res, next){
-    res.send('OK!');
-    next();
-});
+
  
 
 

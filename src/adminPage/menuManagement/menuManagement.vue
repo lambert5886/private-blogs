@@ -2,19 +2,40 @@
     <layout>
         <Row :gutter="16"
              :style="{'margin-top': '10px'}">
+            <Col span="3">
+            &nbsp;
+            </Col>
+            <Col span="8">
             <div class="caozuo">
                 <Button type="success"
                         @click="showAddNew">新增</Button>
             </div>
             <div class="caozuo edit">
-                <Button type="warning">修改</Button>
+                <Button type="warning"
+                        >修改</Button>
             </div>
             <div class="caozuo">
                 <Button type="error">删除</Button>
             </div>
+            </Col>
+            <Col span="3">
+            &nbsp;
+            </Col>
 
         </Row>
-        <Modal v-model="addNewMenu"
+
+        <Row :gutter="16">
+            <Col span="3">
+            &nbsp;
+            </Col>
+            <Col span="18">
+            <Table border
+                   :columns="menuListTitle"
+                   :data="menuList"></Table>
+            </Col>
+        </Row>
+
+        <Modal v-model="addNew"
                title="添加菜单"
                width="600"
                @on-ok="ok"
@@ -89,29 +110,192 @@ export default {
       formItem: {
         isChildren: false
       },
-      addNewMenu: false,
-      single: false,
+      addNew: false,
+      single: 'add',
+      eidtId: null,
+      menuListTitle: [
+        {
+          title: "ID",
+          key: "id"
+        },
+        {
+          title: "类别",
+          key: "menuType",
+          render: (h, params) => {
+             
+              if(params.row.menuType == '0'){
+                  return h('span', {}, '前端');
+              }else{
+                   return h('span', {}, '后端');
+              }
+          }
+        },
+        {
+          title: "名称",
+          key: "title"
+        },
+        {
+          title: "标识",
+          key: "value"
+        },
+        {
+          title: "路径",
+          key: "path"
+        },
+
+        {
+          title: "子菜单",
+          key: "childrenList",
+          render: (h, params) => {
+           
+            if (params.row.childrenList.length > 0) {
+              return h("span", {}, '是');
+            }else {
+                return h('span', {}, '否')
+            }
+          }
+        },
+         {
+          title: "操作",
+          key: "action",
+          width: 200,
+          align: "center",
+          render: (h, params) => {
+
+           
+            return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "success",
+                    size: "small"
+                  },
+                  style: {
+                    marginRight: "5px"
+                  },
+                  on: {
+                    click: () => {
+                      this.showAddNew();
+                    }
+                  }
+                },
+                "新增"
+              ),
+                 h(
+                "Button",
+                {
+                  props: {
+                    type: "warning",
+                    size: "small"
+                  },
+                   style: {
+                    marginRight: "5px"
+                  },
+                  on: {
+                    click: () => {
+                      
+                      this.showEditMenu(params);
+                    }
+                  }
+                },
+                "修改"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "error",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.remove(params.index);
+                    }
+                  }
+                },
+                "删除"
+              )
+            ]);
+          }
+        }
+      ],
+      menuList: [],
       parentList: []
     };
   },
+  mounted() {
+    this.getMenus();
+  },
   methods: {
     showAddNew() {
-      this.addNewMenu = true;
+      this.addNew = true;
     },
-    ok() {
-      console.log(this.formItem);
-      let params = this.formItem;
+    showEditMenu(info){
+      this.single = 'edit';
+      let _id = info.row._id;
+      this.eidtId = _id;
+      this.addNew = true;
+
+      this.formItem = Object.assign({}, info.row);
+
       
+    },
+    getMenus() {
+      this.axios({
+        method: "get",
+        url: "http://localhost:8099/menu/getMenu"
+      }).then(res => {
+        console.log(res, "get Menu");
+        this.menuList = [];
+        this.menuList.push(...res.data.data);
+      });
+    },
+    editMenu(id){
+        let _opts = this.formItem;
+
+        let _params = {};
+            for( let keys in _opts){
+              console.log(keys.indexOf('_'))
+              if(keys.indexOf('_') < 0){
+                _params[keys] = _opts[keys]
+              }
+            }
+            console.log(_params)
+            _params._id = _opts._id;
+           
+        this.axios({
+            method: 'post',
+            url: 'http://localhost:8099/menu/editMenu',
+            data: _params
+        }).then( (res) => {
+            console.log(res.data);
+        });
+    },
+    addNewMenu(){
+          let params = this.formItem;
+
       this.axios({
         method: "post",
         url: "http://localhost:8099/menu/saveMenu",
         data: params
       }).then(res => {
-        console.log(res, "menu 响应《》《》《》《》");
+        console.log(res, "menu 响应 ");
       });
+
+    },
+    ok() {
+
+      if(this.single == 'add'){
+        this.addNewMenu();
+      }
+      if(this.single == 'edit'){
+        this.editMenu();
+      }
+  
+
     },
     getParent() {
-    
       if (this.formItem.isChildren) {
         this.axios({
           method: "get",
@@ -123,10 +307,8 @@ export default {
         });
       }
     },
-    cancel() {},
- 
-  },
- 
+    cancel() {}
+  }
 };
 </script>
 

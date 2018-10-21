@@ -6,6 +6,7 @@ import {
 import {
   getMenu,
   saveMenu,
+  editMenu
 } from './menu';
 
 export {
@@ -13,4 +14,5 @@ export {
   getArticles,
   getMenu,
   saveMenu,
+  editMenu
 }

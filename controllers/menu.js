@@ -4,9 +4,9 @@ import {
 
 const saveMenu = async (req, res, next) => {
   const opts = req.body;
-  console.log(' menu 保存 请求 >>>  ', opts)
+
   if (opts.isChildren) {
-   let _update = await menuModel.updateOne({
+    let _update = await menuModel.updateOne({
       _id: opts.parentId
     }, {
       childrenList: [new menuModel(opts)]
@@ -22,6 +22,15 @@ const saveMenu = async (req, res, next) => {
   }
 };
 
+const editMenu = async (req, res, next) => {
+  let opts = req.body;
+  console.log('opts >>> ', opts)
+  let menuSave = new menuModel(opts);
+  let _editMenu = await menuSave.save(opts );
+
+  return _editMenu;
+}
+
 const getMenu = async (req, res, next) => {
   const _data = await menuModel.find();
 
@@ -30,5 +39,6 @@ const getMenu = async (req, res, next) => {
 
 export {
   saveMenu,
-  getMenu
+  getMenu,
+  editMenu
 }

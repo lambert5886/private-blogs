@@ -2,6 +2,10 @@
   <div class="cont">
     <Row :gutter="16"
          :style="{'margin-top': '10px'}">
+      <Col span="3">
+      &nbsp;
+      </Col>
+      <Col span="8">
       <div class="caozuo">
         <Button type="success"
                 @click="showAddNew">新增</Button>
@@ -14,10 +18,24 @@
         <Button type="error"
                 @click="getArticle">删除</Button>
       </div>
-
-      {{this.$route.params.id}}
+      </Col>
+      <Col span="3">
+      &nbsp;
+      </Col>
 
     </Row>
+    <Row>
+      <Col span="2">
+      &nbsp;
+      </Col>
+      <Col span="18">
+      <Table border
+             :columns="articleTitle"
+             :data="articles"></Table>
+      </Col>
+
+    </Row>
+
     <Row>
       <Col span="2"> &nbsp;
       </Col>
@@ -37,8 +55,90 @@ export default {
   data() {
     return {
       current: "",
-      url: ""
+      url: "",
+      articleTitle: [
+        {
+          title: "标题",
+          key: "title"
+        },
+        {
+          title: "关键字",
+          key: "keyWords"
+        },
+        {
+          title: "简介",
+          key: "description"
+        },
+        {
+          title: "操作",
+          key: "action",
+          width: 200,
+          align: "center",
+          render: (h, params) => {
+
+           
+            return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "success",
+                    size: "small"
+                  },
+                  style: {
+                    marginRight: "5px"
+                  },
+                  on: {
+                    click: () => {
+                      this.showAddNew();
+                    }
+                  }
+                },
+                "新增"
+              ),
+                 h(
+                "Button",
+                {
+                  props: {
+                    type: "warning",
+                    size: "small"
+                  },
+                   style: {
+                    marginRight: "5px"
+                  },
+                  on: {
+                    click: () => {
+                      console.log(params)
+                      this.articleEditor();
+                    }
+                  }
+                },
+                "修改"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "error",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.remove(params.index);
+                    }
+                  }
+                },
+                "删除"
+              )
+            ]);
+          }
+        }
+      ],
+      articles: []
     };
+  },
+  mounted() {
+    this.getArticle();
   },
   methods: {
     showAddNew() {
@@ -55,11 +155,13 @@ export default {
       };
 
       this.axios({
-        method: "post",
+        method: "get",
         url: "http://localhost:8099/content/article",
         data: params
       }).then(res => {
-        console.log("请求的数据 >>>>  ", res);
+        this.articles = [];
+        console.log(res.data.data);
+        this.articles.push(...res.data.data);
       });
     }
   },
