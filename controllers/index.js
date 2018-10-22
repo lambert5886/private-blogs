@@ -1,6 +1,7 @@
 import {
   getArticles,
-  saveArticle
+  saveArticle,
+  editArticle
 } from './article';
 
 import {
@@ -12,6 +13,7 @@ import {
 export {
   saveArticle,
   getArticles,
+  editArticle,
   getMenu,
   saveMenu,
   editMenu

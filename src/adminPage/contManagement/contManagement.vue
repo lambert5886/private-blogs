@@ -41,7 +41,8 @@
       </Col>
       <Col span="18">
       <component :is="current"
-                 :saveUrl="url"></component>
+                 :saveUrl="url"
+                 :data="editData"></component>
 
       </Col>
 
@@ -51,6 +52,7 @@
 
 <script>
 import addEditor from "@/components/text-editor";
+import { EventBus } from '@/tools';
 export default {
   data() {
     return {
@@ -109,7 +111,7 @@ export default {
                   on: {
                     click: () => {
                       console.log(params)
-                      this.articleEditor();
+                      this.articleEditor(params);
                     }
                   }
                 },
@@ -134,20 +136,29 @@ export default {
           }
         }
       ],
-      articles: []
+      articles: [],
+      editData: {},
+      editArticle: {
+
+      }
     };
   },
   mounted() {
     this.getArticle();
+    EventBus.$on('changeArticle', this.getArticle);
   },
   methods: {
     showAddNew() {
       this.$router.push({ path: "/admin/contManagement/add" });
       this.url = "/content/saveArticle";
     },
-    articleEditor() {
+    articleEditor(info) {
       this.$router.push({ path: "/admin/contManagement/editor" });
-      this.url = "/saveEditor";
+      this.url = "/content/editArticle";
+    
+ 
+      EventBus.$emit('editArticle', info.row);
+    
     },
     getArticle() {
       let params = {
@@ -160,14 +171,13 @@ export default {
         data: params
       }).then(res => {
         this.articles = [];
-        console.log(res.data.data);
+      
         this.articles.push(...res.data.data);
       });
     }
   },
   beforeRouteUpdate(to, from, next) {
-    console.log(this.$route.params.id, " <<< id change <<<< ");
-    console.log(to);
+   
     if (to.params.id == "add") this.current = addEditor;
 
     next();

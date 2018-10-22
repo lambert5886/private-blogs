@@ -3,6 +3,7 @@ import express from 'express';
 import {
   saveArticle,
   getArticles,
+  editArticle,
   getMenu,
   saveMenu,
   editMenu
@@ -40,6 +41,27 @@ Router.post('/content/saveArticle', (req, res, next) => {
   });
 
 });
+
+Router.post('/content/editArticle', (req, res, next) => {
+  let _ret = editArticle(req, res);
+  _ret.then( result => {
+    if(result){
+      res.json({
+        success: true,
+      })
+    }
+    next();
+  }, err => {
+    if(err){
+      res.json({
+        success: false
+      })
+    }
+    next();
+  })
+})
+
+
 
 // menu 
 

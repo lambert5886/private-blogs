@@ -1,3 +1,4 @@
+import Vue from 'vue';
 
 const times =  function(time){
 	
@@ -20,7 +21,9 @@ const times =  function(time){
 	return {minutes: _minutes, seconds: _seconds};
 }
 
-export default times;
+const EventBus = new Vue();
+
+export {times, EventBus} ;
 
 
 function startTime(){

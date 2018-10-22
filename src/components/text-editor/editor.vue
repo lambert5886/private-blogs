@@ -32,6 +32,8 @@ import "tinymce/plugins/wordcount";
 import "tinymce/plugins/colorpicker";
 import "tinymce/plugins/textcolor";
 
+
+import { EventBus } from '@/tools';
 export default {
   name: "tinymce",
   props: {
@@ -40,6 +42,10 @@ export default {
     },
     saveUrl: {
       type: String
+    },
+    data: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
@@ -63,14 +69,18 @@ export default {
   },
   mounted() {
     tinymce.init({});
+    EventBus.$on('editArticle', this.editHandle);
   },
   watch: {
     $route: function() {
-      console.log(this.$route.params.id, "route");
-      console.log(this.saveUrl, "route url");
+     
     }
   },
   methods: {
+    editHandle(info){
+      this.article = Object.assign({}, info);
+     
+    },
     saveArticle() {
       console.log(this.article);
       console.log(this.saveUrl, "提交地址");
@@ -81,7 +91,10 @@ export default {
         url: _url,
         data: params
       }).then(res => {
-        console.log("响应 res >>> ", res.data);
+        if(res.data.success){
+          EventBus.$emit('changeArticle');
+        }
+       
       });
     }
   },
