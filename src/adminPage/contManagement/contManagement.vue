@@ -1,23 +1,14 @@
 <template>
   <div class="cont">
-    <Row :gutter="16"
-         :style="{'margin-top': '10px'}">
+    <Row :gutter="16" :style="{'margin': '10px 0'}">
       <Col span="3">
       &nbsp;
       </Col>
       <Col span="8">
       <div class="caozuo">
-        <Button type="success"
-                @click="showAddNew">新增</Button>
+        <Button type="success" @click="showAddNew">新增</Button>
       </div>
-      <div class="caozuo edit">
-        <Button type="warning"
-                @click="articleEditor">修改</Button>
-      </div>
-      <div class="caozuo">
-        <Button type="error"
-                @click="getArticle">删除</Button>
-      </div>
+
       </Col>
       <Col span="3">
       &nbsp;
@@ -29,9 +20,7 @@
       &nbsp;
       </Col>
       <Col span="18">
-      <Table border
-             :columns="articleTitle"
-             :data="articles"></Table>
+      <Table border :columns="articleTitle" :data="articles"></Table>
       </Col>
 
     </Row>
@@ -40,9 +29,7 @@
       <Col span="2"> &nbsp;
       </Col>
       <Col span="18">
-      <component :is="current"
-                 :saveUrl="url"
-                 :data="editData"></component>
+      <component :is="current" :saveUrl="url" :data="editData"></component>
 
       </Col>
 
@@ -52,7 +39,7 @@
 
 <script>
 import addEditor from "@/components/text-editor";
-import { EventBus } from '@/tools';
+import { EventBus } from "@/tools";
 export default {
   data() {
     return {
@@ -77,14 +64,12 @@ export default {
           width: 200,
           align: "center",
           render: (h, params) => {
-
-           
             return h("div", [
               h(
                 "Button",
                 {
                   props: {
-                    type: "success",
+                    type: "warning",
                     size: "small"
                   },
                   style: {
@@ -92,25 +77,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.showAddNew();
-                    }
-                  }
-                },
-                "新增"
-              ),
-                 h(
-                "Button",
-                {
-                  props: {
-                    type: "warning",
-                    size: "small"
-                  },
-                   style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      console.log(params)
+                      console.log(params);
                       this.articleEditor(params);
                     }
                   }
@@ -126,7 +93,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.remove(params.index);
+                      this.deleteArticle(params);
                     }
                   }
                 },
@@ -138,14 +105,12 @@ export default {
       ],
       articles: [],
       editData: {},
-      editArticle: {
-
-      }
+      editArticle: {}
     };
   },
   mounted() {
     this.getArticle();
-    EventBus.$on('changeArticle', this.getArticle);
+    EventBus.$on("changeArticle", this.getArticle);
   },
   methods: {
     showAddNew() {
@@ -155,10 +120,8 @@ export default {
     articleEditor(info) {
       this.$router.push({ path: "/admin/contManagement/editor" });
       this.url = "/content/editArticle";
-    
- 
-      EventBus.$emit('editArticle', info.row);
-    
+
+      EventBus.$emit("editArticle", info.row);
     },
     getArticle() {
       let params = {
@@ -171,13 +134,29 @@ export default {
         data: params
       }).then(res => {
         this.articles = [];
-      
+
         this.articles.push(...res.data.data);
+      });
+    },
+    deleteArticle(info) {
+      let _id = info.row._id;
+      let _params = {};
+      _params.id = _id;
+
+      this.axios({
+        method: "post",
+        url: "http://localhost:8099/content/deleteArticle",
+        data: _params
+      }).then(res => {
+        if (res.data.success) {
+          alert("删除成功!");
+          this.getArticle();
+        }
       });
     }
   },
+
   beforeRouteUpdate(to, from, next) {
-   
     if (to.params.id == "add") this.current = addEditor;
 
     next();

@@ -1,7 +1,7 @@
 <template>
     <layout>
         <Row :gutter="16"
-             :style="{'margin-top': '10px'}">
+             :style="{'margin': '10px 0'}">
             <Col span="3">
             &nbsp;
             </Col>
@@ -10,13 +10,7 @@
                 <Button type="success"
                         @click="showAddNew">新增</Button>
             </div>
-            <div class="caozuo edit">
-                <Button type="warning"
-                        >修改</Button>
-            </div>
-            <div class="caozuo">
-                <Button type="error">删除</Button>
-            </div>
+            
             </Col>
             <Col span="3">
             &nbsp;
@@ -164,24 +158,7 @@ export default {
 
            
             return h("div", [
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "success",
-                    size: "small"
-                  },
-                  style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      this.showAddNew();
-                    }
-                  }
-                },
-                "新增"
-              ),
+           
                  h(
                 "Button",
                 {

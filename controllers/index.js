@@ -1,7 +1,8 @@
 import {
   getArticles,
   saveArticle,
-  editArticle
+  editArticle,
+  deleteArticle
 } from './article';
 
 import {
@@ -14,6 +15,7 @@ export {
   saveArticle,
   getArticles,
   editArticle,
+  deleteArticle,
   getMenu,
   saveMenu,
   editMenu

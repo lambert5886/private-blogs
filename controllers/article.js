@@ -26,6 +26,19 @@ const editArticle = async (req, res, next) => {
   return _editAritcle;
 }
 
+const deleteArticle = async (req, res, next) => {
+  const _opts = req.body;
+
+  const _deleteArticle = await articleModel.deleteOne({_id: _opts.id}, (err) => {
+    if(err){
+      return err;
+    }
+  });
+
+  return _deleteArticle;
+
+}
+
 const getArticles = async (req, res, next) => {
   const _data = await articleModel.find();
 
@@ -35,5 +48,6 @@ const getArticles = async (req, res, next) => {
 export {
   saveArticle,
   getArticles,
-  editArticle
+  editArticle,
+  deleteArticle
 }

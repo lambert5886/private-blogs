@@ -4,6 +4,7 @@ import {
   saveArticle,
   getArticles,
   editArticle,
+  deleteArticle,
   getMenu,
   saveMenu,
   editMenu
@@ -59,6 +60,18 @@ Router.post('/content/editArticle', (req, res, next) => {
     }
     next();
   })
+});
+
+Router.post('/content/deleteArticle', (req, res, next) => {
+  let _ret = deleteArticle(req, res);
+      _ret.then( result => {
+          if(result){
+            res.json({
+              success: true,
+            })
+          };
+          next();
+      });
 })
 
 
