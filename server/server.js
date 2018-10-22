@@ -32,9 +32,9 @@ app.post('/home', function(req, res, next){
     next();
 });
  
-router.post('/saveAdd', (req, res, next) => {
+app.post('/saveAdd', (req, res, next) => {
     saveArticle(req, res);
-    
+    res.send();
     next(); 
 });
 
