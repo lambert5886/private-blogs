@@ -3,10 +3,11 @@ import bodyParser from 'body-parser'
 import graphqlHTTP from 'express-graphql'
 import {buildSchema} from 'graphql'
 
-import  {saveArticle, getArticles}  from '../controllers'
+
 import   mongoose from 'mongoose' 
 
 import schema from '../glahplmodel/query';
+import contRoute from './router';
 
 var root = { hello: () => 'hello world !'};
 
@@ -27,24 +28,12 @@ app.all('*', function(req, res, next){
 
     next();
 });
-app.post('/home', function(req, res, next){
-    res.send('OK!');
-    next();
-});
+
  
-app.post('/saveAdd', (req, res, next) => {
-    saveArticle(req, res);
-    res.send();
-    next(); 
-});
 
 
-router.post('/getArticle', (req, res, next) => {
-    console.log(getArticles)
-    getArticles(req, res);
-    res.send();
-    next();
-})
+app.use(contRoute)
+ 
 app.use('/graphql', graphqlHTTP({
     schema: schema,
    

@@ -13,7 +13,7 @@
             <p class="des">
                 {{item.description}}
             </p>
-            <p class="link">
+            <p class="link" v-if="item.path">
                 <router-link :to="item.path">{{item.linkTitle}}</router-link>
 
             </p>

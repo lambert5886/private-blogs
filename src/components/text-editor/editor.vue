@@ -35,19 +35,19 @@ import "tinymce/plugins/textcolor";
 export default {
   name: "tinymce",
   props: {
-      id: {
-          type: String,
-      },
-      saveUrl: {
-          type: String
-      }
+    id: {
+      type: String
+    },
+    saveUrl: {
+      type: String
+    }
   },
   data() {
     return {
       article: {
-        tinymceHtml: "请输入内容",
-      },  
-      
+        tinymceHtml: "请输入内容"
+      },
+
       init: {
         language_url: "/static/zh_CN.js",
         language: "zh_CN",
@@ -63,29 +63,27 @@ export default {
   },
   mounted() {
     tinymce.init({});
-   
   },
   watch: {
-      '$route': function(){
-          console.log(this.$route.params.id, 'route')
-          console.log(this. saveUrl,  'route url')
-      }
+    $route: function() {
+      console.log(this.$route.params.id, "route");
+      console.log(this.saveUrl, "route url");
+    }
   },
   methods: {
-      saveArticle(){
-         
-          console.log(this.article)
-          console.log(this.saveUrl, '提交地址')
-          let params = this.article;
-          let _url ='http://localhost:8099' + this.saveUrl;
-          this.axios({
-              method: 'post',
-              url: _url,
-              data: params,
-          }).then( (res) => {
-              console.log('响应 res >>> ', res.data)
-          })
-      }
+    saveArticle() {
+      console.log(this.article);
+      console.log(this.saveUrl, "提交地址");
+      let params = this.article;
+      let _url = "http://localhost:8099" + this.saveUrl;
+      this.axios({
+        method: "post",
+        url: _url,
+        data: params
+      }).then(res => {
+        console.log("响应 res >>> ", res.data);
+      });
+    }
   },
   components: { Editor }
 };

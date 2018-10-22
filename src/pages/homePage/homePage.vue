@@ -1,15 +1,15 @@
 <template>
-    <div>
+  <div>
     <Header>
-					<HeadNav :menuList='headNavLists'></HeadNav>
-			
-			</Header>
-			<content>
-        <component :is="currentComponent"></component>
-					<!-- <router-view></router-view> -->
-			</content>
+      <HeadNav :menuList='headNavLists'></HeadNav>
+
+    </Header>
+    <content>
+      <component :is="currentComponent"></component>
+      <!-- <router-view></router-view> -->
+    </content>
     <!--  -->
- </div>
+  </div>
 </template>
 
 <script>
@@ -22,17 +22,20 @@ import javascript from "@/pages/javascript";
 export default {
   data() {
     return {
-      current: "home"
+      current: "home",
+      headNavLists: []
     };
   },
-  methods: {},
+
+  mounted() {
+    this.getMunus();
+  },
 
   beforeRouteUpdate(to, from, next) {
     this.current = to.params.id;
     console.log("from homepage  :::  ", this.$route.params.id, to.params.id);
     next();
   },
- 
 
   components: {
     Html5,
@@ -41,51 +44,21 @@ export default {
     home,
     HeadNav
   },
+  methods: {
+    getMunus() {
+      this.axios({
+        method: "get",
+        url: "http://localhost:8099/menu/getMenu"
+      }).then(res => {
+        console.log(res, "get Menu");
+        this.headNavLists = [];
+        this.headNavLists.push(...res.data.data);
+      });
+    }
+  },
   computed: {
     currentComponent() {
       return this.current;
-    },
-        headNavLists() {
-      var _arr = [
-        {
-          text: "é¦–é¡µ",
-          name: "nav_01",
-          path: "/article/home",
-          hasChilds: false
-        },
-        {
-          text: "Html5",
-          name: "nav_01",
-          path: "/article/Html5",
-          hasChilds: false
-        },
-        {
-          text: "css3",
-          name: "nav_01",
-          hasChilds: true,
-          childItems: [
-            {
-              text: "css2",
-              name: "nav_02",
-              path: "/article/css3",
-              hasChilds: false
-            },
-            {
-              text: "css2",
-              name: "nav_02",
-              path: "/article/css3",
-              hasChilds: false
-            }
-          ]
-        },
-        {
-          text: "Javascript",
-          name: "nav_01",
-          path: "/article/javascript",
-          hasChilds: false
-        }
-      ];
-      return _arr;
     }
   }
 };

@@ -21,16 +21,16 @@ export default {
     menu() {
       return [
         {
-          text: "菜单管理",
+          title: "菜单管理",
           name: "menu",
           path: "/admin/menuManagement",
-          hasChilds: false
+          childrenList: []
         },
           {
-          text: "内容管理",
+          title: "内容管理",
           name: "cont",
           path: "/admin/contManagement/index",
-          hasChilds: false
+          childrenList: []
         }
       ];
     }

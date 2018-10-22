@@ -13,7 +13,7 @@ const blogPostType = new GraphQLObjectType({
     name: 'BlogPost',
     fields: {
         _id: {
-            type:  GraphQLID
+            type: GraphQLID
         },
         title: {
             type: GraphQLString
@@ -22,18 +22,18 @@ const blogPostType = new GraphQLObjectType({
             type: GraphQLString
         }
 
-       
+
     }
 })
- 
+
 const blogs = {
     type: new GraphQLList(blogPostType),
     args: {},
-    resolve(root, params, options){
+    resolve(root, params, options) {
         let getValue = async () => {
             await articleModel.find().exec();
         }
-       
+
         return getValue;
     }
 }
@@ -41,7 +41,7 @@ const blogs = {
 export default new GraphQLSchema({
     query: new GraphQLObjectType({
         name: 'blogsQuery',
-        fields:{
+        fields: {
             blogs
         }
     })
