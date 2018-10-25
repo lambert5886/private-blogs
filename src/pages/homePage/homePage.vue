@@ -50,9 +50,15 @@
           method: "get",
           url: "http://localhost:8099/menu/getMenu"
         }).then(res => {
-          console.log(res, "get Menu");
+          let _datas = res.data.data;
           this.headNavLists = [];
-          this.headNavLists.push(...res.data.data);
+          for(let i = 0; i < _datas.length; i++){
+            if(_datas[i].menuType == '0'){
+              this.headNavLists.push(_datas[i]);
+            }
+          }
+
+          ;
         });
       }
     },

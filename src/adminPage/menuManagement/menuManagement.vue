@@ -93,8 +93,7 @@ import menus from "@/components/menu";
 export default {
   data() {
     return {
-      menu1: "menu1",
-      menu2: "menu2",
+     
       menuType: [{ type: 0, text: "前端" }, { type: 1, text: "后端" }],
       formItem: {
         isChildren: false,
@@ -107,7 +106,7 @@ export default {
         {
           title: "菜单ID",
           key: "_id",
-          width: 150,
+          width: 100,
           render: (h, params) => {
             let _id = params.row._id;
 
@@ -121,6 +120,7 @@ export default {
         {
           title: "类别",
           key: "menuType",
+           width: 80,
           render: (h, params) => {
             if (params.row.menuType == "0") {
               return h("span", {}, "前端");
@@ -131,20 +131,23 @@ export default {
         },
         {
           title: "名称",
-          key: "title"
+          key: "title",
+           width: 80,
         },
         {
           title: "标识",
-          key: "value"
+          key: "value",
+           width: 80,
         },
         {
           title: "路径",
-          key: "path"
+          key: "path",
+          
         },
         {
           title: "父菜单",
           key: "parentId",
-          width: 120,
+          width: 100,
           render: (h, params) => {
             let _id = params.row.parentId;
             console.log(_id , '_id')
@@ -162,6 +165,7 @@ export default {
         {
           title: "子菜单",
           key: "isChildren",
+          
           render: (h, params) => {
             if (params.row.isChildren) {
               return h("span", {}, "是");
