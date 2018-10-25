@@ -7,7 +7,8 @@ import {
   deleteArticle,
   getMenu,
   saveMenu,
-  editMenu
+  editMenu,
+  deleteMenu
 } from '../../controllers'
 const Router = express.Router();
 
@@ -118,6 +119,21 @@ Router.post('/menu/editMenu', (req, res, next) => {
      
        next();
      })
+});
+
+Router.post('/menu/deleteMenu', (req, res, next) => {
+  let _deleteMenu = deleteMenu(req, res);
+  _deleteMenu.then( result => {
+    if(result){
+      res.json({
+        success: true,
+      })
+    };
+
+    next();
+  }, (err) => {
+    next();
+  })
 })
 
 export default Router;

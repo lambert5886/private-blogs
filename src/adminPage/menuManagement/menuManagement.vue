@@ -208,7 +208,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.remove(params.index);
+                      this.deleteMenu(params);
                     }
                   }
                 },
@@ -270,6 +270,22 @@ export default {
         }
       });
     },
+    deleteMenu(info){
+      console.log(' info  >>> ', info);
+      let params = info.row;
+
+      this.axios({
+        method: 'post',
+        url: 'http://localhost:8099/menu/deleteMenu',
+        data: params
+      }).then( res => {
+        if(re.data.success){
+          alert('删除成功!');
+          this.getMenus();
+        }
+      })
+
+    },
     addNewMenu() {
       let params = this.formItem;
 
@@ -279,7 +295,7 @@ export default {
         data: params
       }).then(res => {
         console.log(res, "menu 响应 ");
-        if (res.success) {
+        if (res.data.success) {
           this.getMenus();
         }
       });
