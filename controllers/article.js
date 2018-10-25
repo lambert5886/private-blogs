@@ -19,7 +19,8 @@ const editArticle = async (req, res, next) => {
   const _opts = req.body;
   let _ids = _opts._id;
   
-  const _editAritcle = await articleModel.updateOne({_id: _ids}, {$set: _opts}, (err, result) => {
+  const _editAritcle = await articleModel.updateOne({_id: _ids}, 
+    {$set: _opts}, (err, result) => {
     
   });
 

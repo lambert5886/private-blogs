@@ -1,21 +1,25 @@
 <template>
-    <div class='tinymce'>
-        <Form :label-width="100" label-position="left">
-            <FormItem label="标题">
-                <Input v-model="article.title"></Input>
-            </FormItem>
-            <FormItem label="关键词">
-                <Input v-model="article.keyWords"></Input>
-            </FormItem>
-            <FormItem label="简介">
-                <Input v-model="article.description"></Input>
-            </FormItem>
-        </Form>
+  <div class='tinymce'>
+    <Form :label-width="100"
+          label-position="left">
+      <FormItem label="标题">
+        <Input v-model="article.title"></Input>
+      </FormItem>
+      <FormItem label="关键词">
+        <Input v-model="article.keyWords"></Input>
+      </FormItem>
+      <FormItem label="简介">
+        <Input v-model="article.description"></Input>
+      </FormItem>
+    </Form>
 
-        <editor id='tinymce' v-model='article.tinymceHtml' :init='init'></editor>
-        <div v-html='article.tinymceHtml'></div>
-        <Button type="success" @click="saveArticle">保存</Button>
-    </div>
+    <editor id='tinymce'
+            v-model='article.tinymceHtml'
+            :init='init'></editor>
+    <div v-html='article.tinymceHtml'></div>
+    <Button type="success"
+            @click="saveArticle">保存</Button>
+  </div>
 </template>
 
 <script>
@@ -32,8 +36,7 @@ import "tinymce/plugins/wordcount";
 import "tinymce/plugins/colorpicker";
 import "tinymce/plugins/textcolor";
 
-
-import { EventBus } from '@/tools';
+import { EventBus } from "@/tools";
 export default {
   name: "tinymce",
   props: {
@@ -69,17 +72,14 @@ export default {
   },
   mounted() {
     tinymce.init({});
-    EventBus.$on('editArticle', this.editHandle);
+    EventBus.$on("editArticle", this.editHandle);
   },
   watch: {
-    $route: function() {
-     
-    }
+    $route: function() {}
   },
   methods: {
-    editHandle(info){
+    editHandle(info) {
       this.article = Object.assign({}, info);
-     
     },
     saveArticle() {
       console.log(this.article);
@@ -91,10 +91,9 @@ export default {
         url: _url,
         data: params
       }).then(res => {
-        if(res.data.success){
-          EventBus.$emit('changeArticle');
+        if (res.data.success) {
+          EventBus.$emit("changeArticle");
         }
-       
       });
     }
   },

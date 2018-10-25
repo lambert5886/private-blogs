@@ -9,10 +9,10 @@ const saveMenu = async (req, res, next) => {
     let _update = await menuModel.updateOne({
       _id: opts.parentId
     }, {
-      childrenList: [new menuModel(opts)]
-    }, (err) => {
-      console.log('err', err)
-    });
+        childrenList: [new menuModel(opts)]
+      }, (err) => {
+        console.log('err', err)
+      });
 
     return _update;
   } else {
@@ -24,9 +24,24 @@ const saveMenu = async (req, res, next) => {
 
 const editMenu = async (req, res, next) => {
   let opts = req.body;
-  console.log('opts >>> ', opts)
-  let menuSave = new menuModel(opts);
-  let _editMenu = await menuSave.save(opts );
+  let _ids = opts._id;
+  let _editMenu = null;
+ 
+  if (opts.isChildren) {
+
+    _editMenu = await menuModel.updateOne({ _id: opts.parentId },
+      { $set: { childrenList: [new menuModel(opts)] } }, (err, result) => {
+
+      });
+  } else {
+
+    _editMenu = await menuModel.updateOne({ _id: _ids },
+      { $set: opts }, (err, result) => {
+
+      });
+  }
+
+
 
   return _editMenu;
 }

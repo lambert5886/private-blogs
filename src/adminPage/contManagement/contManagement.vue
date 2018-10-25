@@ -1,12 +1,14 @@
 <template>
   <div class="cont">
-    <Row :gutter="16" :style="{'margin': '10px 0'}">
+    <Row :gutter="16"
+         :style="{'margin': '10px 0'}">
       <Col span="3">
       &nbsp;
       </Col>
       <Col span="8">
       <div class="caozuo">
-        <Button type="success" @click="showAddNew">新增</Button>
+        <Button type="success"
+                @click="showAddNew">新增</Button>
       </div>
 
       </Col>
@@ -20,7 +22,9 @@
       &nbsp;
       </Col>
       <Col span="18">
-      <Table border :columns="articleTitle" :data="articles"></Table>
+      <Table border
+             :columns="articleTitle"
+             :data="articles"></Table>
       </Col>
 
     </Row>
@@ -29,7 +33,9 @@
       <Col span="2"> &nbsp;
       </Col>
       <Col span="18">
-      <component :is="current" :saveUrl="url" :data="editData"></component>
+      <component :is="current"
+                 :saveUrl="url"
+                 :data="editData"></component>
 
       </Col>
 
@@ -176,8 +182,7 @@ div.caozuo {
   margin-left: 15px;
   margin-bottom: 10px;
 }
+
 .edit {
 }
 </style>
-
-
