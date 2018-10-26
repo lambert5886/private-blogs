@@ -52,8 +52,36 @@ const getMenu = async (req, res, next) => {
   return _data;
 }
 
+const deleteMenu = async (req, res, next) => {
+
+
+  let _opts = req.body;
+  let _parentId = _opts.parentId;
+  let  _childrenId = _opts._id;
+  let  _deleteMenu = null;
+  
+  console.log(  'deleteMenu <<< ')
+
+ 
+  let _menu = mongoose.model('menu');
+
+  console.log(_menu.children,  'deleteMenu <<< ')
+
+    // _deleteMenu = await menuModel.updateOne({_id: _parentId },
+    //  { '$pull': {childrenList: {_id: _childrenId} } }, (err, result) => {
+    //     console.log('err >>>> ', err)
+    //  });
+
+    _deleteMenu = await menuModel.children.id(_childrenId).remove();
+     return _deleteMenu;
+}
+
+
+
+
 export {
   saveMenu,
   getMenu,
-  editMenu
+  editMenu,
+  deleteMenu
 }

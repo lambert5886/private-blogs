@@ -8,7 +8,9 @@ import {
 import {
   getMenu,
   saveMenu,
-  editMenu
+  editMenu,
+  deleteMenu,
+  
 } from './menu';
 
 export {
@@ -18,5 +20,6 @@ export {
   deleteArticle,
   getMenu,
   saveMenu,
-  editMenu
+  editMenu,
+  deleteMenu
 }

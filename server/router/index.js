@@ -123,6 +123,7 @@ Router.post('/menu/editMenu', (req, res, next) => {
 
 Router.post('/menu/deleteMenu', (req, res, next) => {
   let _deleteMenu = deleteMenu(req, res);
+  
   _deleteMenu.then( result => {
     if(result){
       res.json({

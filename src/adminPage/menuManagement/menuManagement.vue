@@ -142,7 +142,7 @@ export default {
         {
           title: "路径",
           key: "path",
-          
+           width: 80,
         },
         {
           title: "父菜单",
@@ -279,8 +279,10 @@ export default {
         url: 'http://localhost:8099/menu/deleteMenu',
         data: params
       }).then( res => {
-        if(re.data.success){
-          alert('删除成功!');
+        if(res.data.success){
+         this.$Notice.success({
+           title: '删除成功!'
+         })
           this.getMenus();
         }
       })
