@@ -65,6 +65,7 @@ Router.post('/content/editArticle', (req, res, next) => {
 
 Router.post('/content/deleteArticle', (req, res, next) => {
   let _ret = deleteArticle(req, res);
+ 
       _ret.then( result => {
           if(result){
             res.json({
@@ -80,6 +81,7 @@ Router.post('/content/deleteArticle', (req, res, next) => {
 // menu 
 
 Router.post('/menu/saveMenu', (req, res, next) => {
+  console.log(req.method, 'req method')
   let _ret = saveMenu(req, res);
   _ret.then(result => {
     if (result) {
@@ -123,7 +125,6 @@ Router.post('/menu/editMenu', (req, res, next) => {
 
 Router.post('/menu/deleteMenu', (req, res, next) => {
   let _deleteMenu = deleteMenu(req, res);
-  
   _deleteMenu.then( result => {
     if(result){
       res.json({

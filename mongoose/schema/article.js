@@ -21,13 +21,9 @@ const articleSchema = new Schema({
     }
 });
 
-articleSchema.pre('save', next => {
-    if (this.isNew) {
-        this.meta.createdAt = this.meta.updatedAt = Date.now()
-      } else {
-        this.meta.updatedAt = Date.now()
-      }
-    next();
-})
+// articleSchema.pre('save', next => {
+//     this.meta.updatedAt = Date.now()
+//     next();
+// })
 
 export default articleSchema;

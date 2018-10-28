@@ -1,52 +1,67 @@
+import mongoose from 'mongoose';
+
 import {
   menuModel
 } from '../mongoose/model';
 
 const saveMenu = async (req, res, next) => {
   const opts = req.body;
-
+  let _update = null;
+ 
   if (opts.isChildren) {
-    let _update = await menuModel.updateOne({
+    _update = await menuModel.updateOne({
       _id: opts.parentId
     }, {
+      $addToSet: {
         childrenList: [new menuModel(opts)]
-      }, (err) => {
-        console.log('err', err)
-      });
+      }
 
-    return _update;
+    }, (err) => {
+      console.log('err', err)
+    });
+
+
   } else {
     let menuSave = new menuModel(opts);
-    const _menuSave = await menuSave.save();
-    return _menuSave;
-  }
+    _update = await menuSave.save();
+
+  };
+  return _update;
+ 
 };
 
 const editMenu = async (req, res, next) => {
   let opts = req.body;
   let _ids = opts._id;
   let _editMenu = null;
- 
+
   if (opts.isChildren) {
 
-    _editMenu = await menuModel.updateOne({ _id: opts.parentId },
-      { $set: { childrenList: [new menuModel(opts)] } }, (err, result) => {
+    _editMenu = await menuModel.updateOne({
+      _id: opts.parentId
+    }, {
+      $set: {
+        childrenList: [new menuModel(opts)]
+      }
+    }, (err, result) => {
 
-      });
+    });
   } else {
 
-    _editMenu = await menuModel.updateOne({ _id: _ids },
-      { $set: opts }, (err, result) => {
+    _editMenu = await menuModel.updateOne({
+      _id: _ids
+    }, {
+      $set: opts
+    }, (err, result) => {
 
-      });
+    });
   }
-
-
 
   return _editMenu;
 }
 
 const getMenu = async (req, res, next) => {
+ 
   const _data = await menuModel.find();
 
   return _data;
@@ -54,27 +69,39 @@ const getMenu = async (req, res, next) => {
 
 const deleteMenu = async (req, res, next) => {
 
-
   let _opts = req.body;
   let _parentId = _opts.parentId;
-  let  _childrenId = _opts._id;
-  let  _deleteMenu = null;
-  
-  console.log(  'deleteMenu <<< ')
+  let _childrenId = _opts._id;
+  let _childrenValue = _opts.value;
+  let _deleteMenu = null;
 
- 
-  let _menu = mongoose.model('menu');
+  if (_opts.isChildren) {
 
-  console.log(_menu.children,  'deleteMenu <<< ')
+    _deleteMenu = await menuModel.updateOne({
+      _id: _parentId
+    }, {
+      $pull: {
+        "childrenList": {
+          'value': _childrenValue
+        }
+      }
+    }, {
+      multi: true
+    }, (err, result) => {
 
-    // _deleteMenu = await menuModel.updateOne({_id: _parentId },
-    //  { '$pull': {childrenList: {_id: _childrenId} } }, (err, result) => {
-    //     console.log('err >>>> ', err)
-    //  });
+    });
 
-    _deleteMenu = await menuModel.children.id(_childrenId).remove();
-     return _deleteMenu;
+  } else {
+    _deleteMenu = await menuModel.deleteOne({
+      _id: _childrenId
+    }, (err, result) => {
+
+    })
+  }
+
+  return _deleteMenu;
 }
+
 
 
 

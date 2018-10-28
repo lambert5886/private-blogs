@@ -19,6 +19,14 @@
              :data="menuList"></Table>
       </Col>
     </Row>
+    <Row :gutter="16">
+      <Col span="3">&nbsp;</Col>
+      <Col span="18">
+      <Page :total="menuListBase.length"
+            :page-size="3"
+            @on-change="changepage"></Page>
+      </Col>
+    </Row>
     <Modal v-model="addNew"
            title="添加菜单"
            width="600"
@@ -93,7 +101,6 @@ import menus from "@/components/menu";
 export default {
   data() {
     return {
-     
       menuType: [{ type: 0, text: "前端" }, { type: 1, text: "后端" }],
       formItem: {
         isChildren: false,
@@ -120,7 +127,7 @@ export default {
         {
           title: "类别",
           key: "menuType",
-           width: 80,
+          width: 80,
           render: (h, params) => {
             if (params.row.menuType == "0") {
               return h("span", {}, "前端");
@@ -132,17 +139,17 @@ export default {
         {
           title: "名称",
           key: "title",
-           width: 80,
+          width: 80
         },
         {
           title: "标识",
           key: "value",
-           width: 80,
+          width: 80
         },
         {
           title: "路径",
           key: "path",
-           width: 80,
+          width: 80
         },
         {
           title: "父菜单",
@@ -150,22 +157,22 @@ export default {
           width: 100,
           render: (h, params) => {
             let _id = params.row.parentId;
-            console.log(_id , '_id')
-            if (_id != undefined ) {
+            console.log(_id, "_id");
+            if (_id != undefined) {
               let _start = _id.substring(0, 4);
               let _end = _id.substring(_id.length - 4, _id.length);
 
               let _filteredId = _start + "..." + _end;
               return h("span", {}, _filteredId);
-            }else{
-              return h("span", {}, '无');
+            } else {
+              return h("span", {}, "无");
             }
           }
         },
         {
           title: "子菜单",
           key: "isChildren",
-          
+
           render: (h, params) => {
             if (params.row.isChildren) {
               return h("span", {}, "是");
@@ -219,11 +226,18 @@ export default {
         }
       ],
       menuList: [],
-      parentList: []
+      menuListBase: [],
+      parentList: [],
+      currentPage: 1,
+      pageSize: 3,
     };
   },
-  mounted() {
+  created(){
     this.getMenus();
+  },
+  mounted() {
+    
+    this.changepage()
   },
   methods: {
     showAddNew() {
@@ -238,23 +252,25 @@ export default {
       this.addNew = true;
     },
     getMenus() {
+      
       this.axios({
         method: "get",
-        url: "http://localhost:8099/menu/getMenu"
+        url: "http://localhost:8099/menu/getMenu",
+        
       }).then(res => {
-        console.log(res, "get Menu");
         this.menuList = [];
         let _data = res.data.data;
-
+        this.menuListBase = [];
         for (let i = 0; i < _data.length; i++) {
           if (_data[i].childrenList.length) {
             for (let k = 0; k < _data[i].childrenList.length; k++) {
-              this.menuList.push(_data[i].childrenList[k]);
+              this.menuListBase.push(_data[i].childrenList[k]);
             }
           }
         }
 
-        this.menuList.push(...res.data.data);
+        this.menuListBase.push(...res.data.data);
+        this.changepage();
       });
     },
     editMenu(id) {
@@ -266,27 +282,28 @@ export default {
         data: _opts
       }).then(res => {
         if (res.data.success) {
+          this.$Notice.success({
+            title: "编辑菜单成功!"
+          });
           this.getMenus();
         }
       });
     },
-    deleteMenu(info){
-      console.log(' info  >>> ', info);
+    deleteMenu(info) {
       let params = info.row;
 
       this.axios({
-        method: 'post',
-        url: 'http://localhost:8099/menu/deleteMenu',
+        method: "post",
+        url: "http://localhost:8099/menu/deleteMenu",
         data: params
-      }).then( res => {
-        if(res.data.success){
-         this.$Notice.success({
-           title: '删除成功!'
-         })
+      }).then(res => {
+        if (res.data.success) {
+          this.$Notice.success({
+            title: "删除成功!"
+          });
           this.getMenus();
         }
-      })
-
+      });
     },
     addNewMenu() {
       let params = this.formItem;
@@ -296,8 +313,15 @@ export default {
         url: "http://localhost:8099/menu/saveMenu",
         data: params
       }).then(res => {
-        console.log(res, "menu 响应 ");
         if (res.data.success) {
+          this.$Notice.success({
+            title: "添加菜单成功!"
+          });
+          this.formItem = Object.assign(
+            {},
+            { isChildren: false },
+            { childrenList: [] }
+          );
           this.getMenus();
         }
       });
@@ -316,13 +340,29 @@ export default {
           method: "get",
           url: "http://localhost:8099/menu/getMenu"
         }).then(res => {
-          console.log(res, "get Menu");
+          this.parentList = [];
+
           this.parentList.push(...res.data.data);
           console.log("parentlist", this.parentList);
         });
       }
     },
-    cancel() {}
+    cancel() {},
+    changepage(info){
+     
+     if(info){
+       this.menuList = [];
+       let _start = (info - 1)*this.pageSize;
+       let _end = _start + this.pageSize;
+       this.menuList.push(...this.menuListBase.slice(_start, _end))
+
+     }else {
+       let _menus = this.menuListBase;
+       
+       this.menuList.push(...this.menuListBase.slice(0, this.pageSize));
+
+     }
+    }
   },
   components: {
     menus
