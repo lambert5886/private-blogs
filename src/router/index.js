@@ -5,6 +5,7 @@ import app from '@/app.vue';
 
 // 前端页面
 import homePage from '@/pages/homePage';
+// 首页
 
 // 后台页面
 import adminHome from '@/adminPage/adminIndex';

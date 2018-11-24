@@ -1,0 +1,104 @@
+<template>
+    <div class="list">
+        <Layout>
+            <content class="content-wrap">
+              <Row :gutter="3">
+                  <Col span="24">
+                    <card v-for="(item, index) in cardLists"
+                      :key="index"
+                      :item="item"></card>
+                  </Col>
+              </Row>
+              <Row :gutter="3" :style="{'padding-top': '15px'}">
+                  <p class="newAtricle">
+                    最新文章
+                  </p>
+                  <Col span="24">
+                      <detail></detail>
+                  </Col>
+              </Row>
+              <Row :gutter="3" :style="{'margin-top': '15px'}">
+                  <Col span="24">
+                       <Page :total="10"></Page>
+                  </Col>
+              </Row>
+                
+            </content>
+             <Sider :style="{'min-width': '400px'}" class="sider-wrap" hide-trigger>
+                <sideList></sideList>
+             </Sider>
+        </Layout>
+
+    </div>
+</template>
+
+<script>
+import card from "@/components/card";
+import sideList from '@/pages/sidebar';
+import detail from '@/components/detail';
+export default {
+  data() {
+    return {
+      cardLists: []
+    };
+  },
+  mounted() {
+  
+
+    this.getArticle();
+  },
+  beforeUpdate(){
+      console.log(this.$route.params.id, ' id >>>> ')
+  },
+  methods: {
+    getArticle() {
+      this.axios({
+        method: "get",
+        url: "http://localhost:8099/content/article"
+      }).then(res => {
+        console.log(" 响应 >>> ", res);
+        this.cardLists = res.data.data;
+      });
+    }
+  },
+  // [{
+  //                 title: '标题标题',
+  //                 description: '内容简介内容简介',
+  //                 imgSrc: require('@/assets/b04.jpg'),
+  //                 path: '',
+  //                 linkTitle: '阅读原文'
+  //             },
+  //           ]
+
+  computed: {},
+  components: {
+    card,
+    sideList,
+    detail
+  }
+};
+</script>
+<style scoped>
+.list {
+  clear: both;
+}
+.layout{
+  border: 1px solid red;
+}
+.content-wrap{
+  padding: 10px;
+  padding-left: 40px;
+  width: 100%;
+  height: 100%;
+}
+.sider-wrap{
+  background: #f5f7f9;
+      padding: 10px 25px;
+}
+
+.newAtricle{
+  font-size: 18px;
+  font-weight: 600;
+}
+</style>
+

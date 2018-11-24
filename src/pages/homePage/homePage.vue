@@ -5,7 +5,8 @@
 
     </Header>
     <content>
-      <component :is="currentComponent"></component>
+      <home></home>
+      <!-- <component :is="currentComponent"></component> -->
       <!-- <router-view></router-view> -->
     </content>
     <!--  -->
@@ -15,9 +16,9 @@
 <script>
   import HeadNav from "@/components/header";
   import home from "@/pages/home";
-  import Html5 from "@/pages/html5";
-  import css3 from "@/pages/css3";
-  import javascript from "@/pages/javascript";
+  // import Html5 from "@/pages/html5";
+  // import css3 from "@/pages/css3";
+  // import javascript from "@/pages/javascript";
 
   export default {
     data() {
@@ -38,9 +39,9 @@
     },
 
     components: {
-      Html5,
-      css3,
-      javascript,
+      // Html5,
+      // css3,
+      // javascript,
       home,
       HeadNav
     },

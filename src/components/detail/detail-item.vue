@@ -27,7 +27,11 @@ export default {
 </script>
 <style scoped>
     .item-wrapper{
-        width: 750px;
+        width: 100%;
+        font-size: 16px;
+    }
+    h2{
+        font-size: 18px;
     }
 </style>
 
