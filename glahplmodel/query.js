@@ -7,14 +7,16 @@ import {
     GraphQLID
 } from 'graphql';
 
-import articleModel from '../mongoose/schema/article';
+import {
+  articleModel
+} from '../mongoose/model';
 
 const blogPostType = new GraphQLObjectType({
     name: 'BlogPost',
     fields: {
-        _id: {
-            type: GraphQLID
-        },
+         _id: {
+      type: GraphQLID
+    },
         title: {
             type: GraphQLString
         },
@@ -30,11 +32,7 @@ const blogs = {
     type: new GraphQLList(blogPostType),
     args: {},
     resolve(root, params, options) {
-        let getValue = async () => {
-            await articleModel.find().exec();
-        }
-
-        return getValue;
+        return articleModel.find();
     }
 }
 
