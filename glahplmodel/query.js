@@ -11,12 +11,30 @@ import {
   articleModel
 } from '../mongoose/model';
 
-const blogPostType = new GraphQLObjectType({
+const menuQueryType = new GraphQLObjectType({
     name: 'BlogPost',
     fields: {
          _id: {
       type: GraphQLID
+    },  
+    id: {
+        type: GraphQLString
     },
+    menuType: {
+         type: GraphQLString    
+    },
+     value: {
+         type: GraphQLString    
+    },
+
+     path: {
+         type: GraphQLString    
+    },
+
+     parentId: {
+         type: GraphQLString    
+    },
+ 
         title: {
             type: GraphQLString
         },
@@ -28,8 +46,8 @@ const blogPostType = new GraphQLObjectType({
     }
 })
 
-const blogs = {
-    type: new GraphQLList(blogPostType),
+const getMenus  = {
+    type: new GraphQLList(menuQueryType),
     args: {},
     resolve(root, params, options) {
         return articleModel.find();
@@ -40,7 +58,7 @@ export default new GraphQLSchema({
     query: new GraphQLObjectType({
         name: 'blogsQuery',
         fields: {
-            blogs
+            getMenus
         }
     })
 })
