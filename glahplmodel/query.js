@@ -1,64 +1,110 @@
 import {
-    GraphQLObjectType,
-    GraphQLSchema,
-    GraphQLNonNull,
-    GraphQLList,
-    GraphQLString,
-    GraphQLID
+  GraphQLObjectType,
+  GraphQLSchema,
+  GraphQLNonNull,
+  GraphQLList,
+  GraphQLString,
+  GraphQLBoolean,
+  GraphQLID
 } from 'graphql';
 
 import {
-  articleModel
+  menuModel
 } from '../mongoose/model';
-
-const menuQueryType = new GraphQLObjectType({
-    name: 'BlogPost',
-    fields: {
-         _id: {
+const menutItemFields = {
+       _id: {
       type: GraphQLID
-    },  
+    },
     id: {
-        type: GraphQLString
+      type: GraphQLString
     },
     menuType: {
-         type: GraphQLString    
+      type: GraphQLString
     },
-     value: {
-         type: GraphQLString    
-    },
-
-     path: {
-         type: GraphQLString    
+    value: {
+      type: GraphQLString
     },
 
-     parentId: {
-         type: GraphQLString    
+    path: {
+      type: GraphQLString
     },
- 
-        title: {
-            type: GraphQLString
-        },
-        description: {
-            type: GraphQLString
-        }
 
-
+    parentId: {
+      type: GraphQLString
+    },
+    isChildren: {
+      type: GraphQLBoolean
+    },
+    title: {
+      type: GraphQLString
+    },
+    description: {
+      type: GraphQLString
     }
+};
+
+const menuItemType =  new GraphQLObjectType({
+  name: 'menuItem',
+ 
+  fields: {
+      ...menutItemFields
+  }
+});
+
+
+const menuQueryType = new GraphQLObjectType({
+  name: 'BlogPost',
+  fields: {
+      childrenList: {
+          type: new GraphQLList(menuItemType)
+      },
+    ...menutItemFields,
+   
+
+
+  }
 })
 
-const getMenus  = {
-    type: new GraphQLList(menuQueryType),
-    args: {},
-    resolve(root, params, options) {
-        return articleModel.find();
-    }
+const getMenus = {
+  type: new GraphQLList(menuQueryType),
+  args: {},
+  resolve(root, params, options) {
+
+    return menuModel.find();
+  }
+}
+
+const menuEditType =  new GraphQLObjectType({
+  name: 'blogEdit',
+  fields: {
+    ...menutItemFields
+  }
+})
+
+const editMenu = {
+  
+  type: menuEditType,
+  args: {
+    ...menutItemFields
+  },
+  resolve(root, params, options){
+
+    console.log(' 保存 menu >>>>  ', root, params, options)
+
+  }
 }
 
 export default new GraphQLSchema({
-    query: new GraphQLObjectType({
-        name: 'blogsQuery',
-        fields: {
-            getMenus
-        }
-    })
+  query: new GraphQLObjectType({
+    name: 'blogsQuery',
+    fields: {
+      getMenus
+    }
+  }),
+  mutation: new GraphQLObjectType({
+    name: 'blogsMutation',
+    fields: {
+      editMenu
+    }
+  })
 })

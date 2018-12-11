@@ -26,18 +26,18 @@ var router = express.Router();
 
 mongoose.connect('mongodb://localhost:27017/private-blogs');
 
-app.all('*', function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE');
+// app.all('*', function (req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header('Access-Control-Allow-Headers', 'Content-Type');
+//   res.header('Access-Control-Allow-Methods', 'PUT, POST, GET,OPTIONS, DELETE');
 
-  next();
+//   next();
  
-});
+// });
 
 
 
-// app.use(cors());
+app.use(cors());
 app.use(contRoute)
 
 app.use('/graphql', graphqlHTTP({

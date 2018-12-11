@@ -7,6 +7,8 @@
       <div class="caozuo">
         <Button type="success"
                 @click="showAddNew">新增</Button>
+                 <Button type="success"
+                @click="apolloEditHandle">apollo edit</Button>
       </div>
       </Col>
       <Col span="3">&nbsp;</Col>
@@ -98,6 +100,7 @@
 <script>
 import { EventBus } from "@/tools";
 import menus from "@/components/menu";
+import graphs from '@/apollo';
 export default {
   data() {
     return {
@@ -273,22 +276,36 @@ export default {
         this.changepage();
       });
     },
-    editMenu(id) {
-      let _opts = this.formItem;
-
-      this.axios({
-        method: "post",
-        url: "http://localhost:8099/menu/editMenu",
-        data: _opts
-      }).then(res => {
-        if (res.data.success) {
-          this.$Notice.success({
-            title: "编辑菜单成功!"
-          });
-          this.getMenus();
+    apolloEditHandle(){
+      let _test = 'from apollo edit >>>> ';
+      console.log(graphs,)
+      this.$apollo.mutate({
+        mutation: graphs.editMenu,
+        variables: {
+          name: _test
         }
-      });
+      })
     },
+    // editMenu(id) {
+    //   let _opts = this.formItem;
+    //   let _params = {
+    //       mutation: `{
+    //         editMenu()
+    //       }`
+    //   }
+    //   this.axios({
+    //     method: "post",
+    //     url: "http://localhost:8099/graphql",
+    //     data: _opts
+    //   }).then(res => {
+    //     if (res.data.success) {
+    //       this.$Notice.success({
+    //         title: "编辑菜单成功!"
+    //       });
+    //       this.getMenus();
+    //     }
+    //   });
+    // },
     deleteMenu(info) {
       let params = info.row;
 
