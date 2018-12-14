@@ -286,26 +286,26 @@ export default {
         }
       })
     },
-    // editMenu(id) {
-    //   let _opts = this.formItem;
-    //   let _params = {
-    //       mutation: `{
-    //         editMenu()
-    //       }`
-    //   }
-    //   this.axios({
-    //     method: "post",
-    //     url: "http://localhost:8099/graphql",
-    //     data: _opts
-    //   }).then(res => {
-    //     if (res.data.success) {
-    //       this.$Notice.success({
-    //         title: "编辑菜单成功!"
-    //       });
-    //       this.getMenus();
-    //     }
-    //   });
-    // },
+    editMenu(id) {
+      let _opts = this.formItem;
+      let _params = {
+          mutation: `{
+            editMenu()
+          }`
+      }
+      this.axios({
+        method: "post",
+        url: "http://localhost:8099/graphql",
+        data: _opts
+      }).then(res => {
+        if (res.data.success) {
+          this.$Notice.success({
+            title: "编辑菜单成功!"
+          });
+          this.getMenus();
+        }
+      });
+    },
     deleteMenu(info) {
       let params = info.row;
 
