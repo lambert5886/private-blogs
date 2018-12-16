@@ -12,6 +12,7 @@
 
 <script>
 import headerNav from "@/components/header";
+import urls from "@/pages/common/urlConfig";
 export default {
   data() {
     return {
@@ -36,10 +37,13 @@ export default {
   },
   methods: {
     getMenu() {
-    
+      let _params = {};
+      _params.method = "get";
+      _params.type = "getMenu";
+
       this.axios({
-        method: "get",
-        url: "http://localhost:8099/menu/getMenu"
+        url: urls,
+        params: _params
       }).then(res => {
         let _datas = res.data.data;
 

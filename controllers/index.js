@@ -13,7 +13,7 @@ import {
   
 } from './menu';
 
-export {
+export default {
   saveArticle,
   getArticles,
   editArticle,

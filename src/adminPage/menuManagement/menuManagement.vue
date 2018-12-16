@@ -7,8 +7,7 @@
       <div class="caozuo">
         <Button type="success"
                 @click="showAddNew">新增</Button>
-                 <Button type="success"
-                @click="apolloEditHandle">apollo edit</Button>
+
       </div>
       </Col>
       <Col span="3">&nbsp;</Col>
@@ -21,7 +20,8 @@
              :data="menuList"></Table>
       </Col>
     </Row>
-    <Row :gutter="16">
+    <Row :gutter="16"
+         :style="{'margin-top': '10px'}">
       <Col span="3">&nbsp;</Col>
       <Col span="18">
       <Page :total="menuListBase.length"
@@ -29,6 +29,8 @@
             @on-change="changepage"></Page>
       </Col>
     </Row>
+
+    <!--添加菜单 start-->
     <Modal v-model="addNew"
            title="添加菜单"
            width="600"
@@ -94,13 +96,15 @@
         </Col>
       </Row>
     </Modal>
+
+    <!--添加菜单 end-->
   </layout>
 </template>
 
 <script>
 import { EventBus } from "@/tools";
 import menus from "@/components/menu";
-import graphs from '@/apollo';
+import urls from "@/pages/common/urlConfig";
 export default {
   data() {
     return {
@@ -232,15 +236,14 @@ export default {
       menuListBase: [],
       parentList: [],
       currentPage: 1,
-      pageSize: 3,
+      pageSize: 3
     };
   },
-  created(){
+  created() {
     this.getMenus();
   },
   mounted() {
-    
-    this.changepage()
+    this.changepage();
   },
   methods: {
     showAddNew() {
@@ -255,11 +258,14 @@ export default {
       this.addNew = true;
     },
     getMenus() {
-      
       this.axios({
         method: "get",
-        url: "http://localhost:8099/menu/getMenu",
-        
+        url: urls,
+        params: {
+          method: "get",
+          type: "getMenu",
+          data: {}
+        }
       }).then(res => {
         this.menuList = [];
         let _data = res.data.data;
@@ -276,43 +282,37 @@ export default {
         this.changepage();
       });
     },
-    apolloEditHandle(){
-      let _test = 'from apollo edit >>>> ';
-      console.log(graphs,)
-      this.$apollo.mutate({
-        mutation: graphs.editMenu,
-        variables: {
-          name: _test
-        }
-      })
-    },
-    // editMenu(id) {
-    //   let _opts = this.formItem;
-    //   let _params = {
-    //       mutation: `{
-    //         editMenu()
-    //       }`
-    //   }
-    //   this.axios({
-    //     method: "post",
-    //     url: "http://localhost:8099/graphql",
-    //     data: _opts
-    //   }).then(res => {
-    //     if (res.data.success) {
-    //       this.$Notice.success({
-    //         title: "编辑菜单成功!"
-    //       });
-    //       this.getMenus();
-    //     }
-    //   });
-    // },
-    deleteMenu(info) {
-      let params = info.row;
 
+    editMenu(id) {
+      let _opts = this.formItem;
+      delete _opts._index;
+      delete _opts._rowKey;
+      console.log("edit menu >>>>  ", _opts);
+      let _params = {
+        type: "editMenu",
+        data: _opts
+      };
       this.axios({
-        method: "post",
-        url: "http://localhost:8099/menu/deleteMenu",
-        data: params
+        url: urls,
+        data: _params
+      }).then(res => {
+        if (res.data.success) {
+          this.$Notice.success({
+            title: "编辑菜单成功!"
+          });
+          this.getMenus();
+        }
+      });
+    },
+    deleteMenu(info) {
+      let _data = info.row;
+      let _params = {};
+      _params.method = "post";
+      _params.type = "deleteMenu";
+      _params.data = _data;
+      this.axios({
+        url: urls,
+        data: _params
       }).then(res => {
         if (res.data.success) {
           this.$Notice.success({
@@ -323,12 +323,17 @@ export default {
       });
     },
     addNewMenu() {
-      let params = this.formItem;
+      let _data = this.formItem;
+
+      let _params = {};
+
+      _params.type = "saveMenu";
+      _params.data = _data;
 
       this.axios({
         method: "post",
-        url: "http://localhost:8099/menu/saveMenu",
-        data: params
+        url: urls,
+        data: _params
       }).then(res => {
         if (res.data.success) {
           this.$Notice.success({
@@ -353,9 +358,14 @@ export default {
     },
     getParent() {
       if (this.formItem.isChildren) {
+        let _params = {};
+
+        _params.type = "getMenu";
+
         this.axios({
           method: "get",
-          url: "http://localhost:8099/menu/getMenu"
+          url: urls,
+          params: _params
         }).then(res => {
           this.parentList = [];
 
@@ -365,20 +375,17 @@ export default {
       }
     },
     cancel() {},
-    changepage(info){
-     
-     if(info){
-       this.menuList = [];
-       let _start = (info - 1)*this.pageSize;
-       let _end = _start + this.pageSize;
-       this.menuList.push(...this.menuListBase.slice(_start, _end))
+    changepage(info) {
+      if (info) {
+        this.menuList = [];
+        let _start = (info - 1) * this.pageSize;
+        let _end = _start + this.pageSize;
+        this.menuList.push(...this.menuListBase.slice(_start, _end));
+      } else {
+        let _menus = this.menuListBase;
 
-     }else {
-       let _menus = this.menuListBase;
-       
-       this.menuList.push(...this.menuListBase.slice(0, this.pageSize));
-
-     }
+        this.menuList.push(...this.menuListBase.slice(0, this.pageSize));
+      }
     }
   },
   components: {

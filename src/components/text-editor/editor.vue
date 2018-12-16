@@ -1,5 +1,10 @@
 <template>
+
   <div class='tinymce'>
+    <Button @click="backHandle"
+            :style="{'margin-bottom': '10px'}">
+      <Icon type="chevron-left"></Icon> 返回
+    </Button>
     <Form :label-width="100"
           label-position="left">
       <FormItem label="标题">
@@ -37,6 +42,7 @@ import "tinymce/plugins/colorpicker";
 import "tinymce/plugins/textcolor";
 
 import { EventBus } from "@/tools";
+import urls from "@/pages/common/urlConfig";
 export default {
   name: "tinymce",
   props: {
@@ -72,20 +78,30 @@ export default {
   },
   mounted() {
     tinymce.init({});
-    EventBus.$on("editArticle", this.editHandle);
+    this.article = Object.assign({}, this.data);
   },
   watch: {
     $route: function() {}
   },
   methods: {
+    backHandle() {
+      this.$router.push({ path: "/admin/contManagement/list" });
+    },
     editHandle(info) {
+      console.log("edit info >>> ", info);
       this.article = Object.assign({}, info);
+
+      console.log(" article >>>> ", this.article);
     },
     saveArticle() {
-      console.log(this.article);
+      let _data = this.article;
+      delete _data._index;
+      delete _data._rowKey;
       console.log(this.saveUrl, "提交地址");
-      let params = this.article;
-      let _url = "http://localhost:8099" + this.saveUrl;
+      let params = {};
+      params.type = this.saveUrl;
+      params.data = _data;
+      let _url = urls;
       this.axios({
         method: "post",
         url: _url,
