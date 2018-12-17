@@ -5,7 +5,7 @@ import {
 } from '../mongoose/model';
 
 const saveMenu = async (req, res, next) => {
-  const opts = req.body;
+  const opts = req.body.data;
   let _update = null;
  
   if (opts.isChildren) {
@@ -31,10 +31,10 @@ const saveMenu = async (req, res, next) => {
 };
 
 const editMenu = async (req, res, next) => {
-  let opts = req.body;
+  let opts = req.body.data;
   let _ids = opts._id;
   let _editMenu = null;
-
+ 
   if (opts.isChildren) {
 
     _editMenu = await menuModel.updateOne({
@@ -69,7 +69,7 @@ const getMenu = async (req, res, next) => {
 
 const deleteMenu = async (req, res, next) => {
 
-  let _opts = req.body;
+  let _opts = req.body.data;
   let _parentId = _opts.parentId;
   let _childrenId = _opts._id;
   let _childrenValue = _opts.value;

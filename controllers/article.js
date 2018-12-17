@@ -4,7 +4,7 @@ import {
 
 
 const saveArticle = async (req, res, next) => {
-  const opts = req.body;
+  const opts = req.body.data;
 
   const article = new articleModel(opts);
 
@@ -16,7 +16,7 @@ const saveArticle = async (req, res, next) => {
 };
 
 const editArticle = async (req, res, next) => {
-  const _opts = req.body;
+  const _opts = req.body.data;
   let _ids = _opts._id;
   
   const _editAritcle = await articleModel.updateOne({_id: _ids}, 
@@ -28,7 +28,7 @@ const editArticle = async (req, res, next) => {
 }
 
 const deleteArticle = async (req, res, next) => {
-  const _opts = req.body;
+  const _opts = req.body.data;
 
   const _deleteArticle = await articleModel.deleteOne({_id: _opts.id}, (err) => {
     if(err){

@@ -42,61 +42,18 @@ const routes = [{
       {
         path: '/admin/contManagement/:id',
         component: contManagement,
-        //  children: [
-        // 	{path: 'index',
-        // 	component: contManagement,
-
-        // 	},
-        // 	 {path: 'add',
-        // 	 component: editor,
-
-        // 	 }
-        //  ]
-      }
+        
+      },
+      //  {
+      //   path: '/admin/contManagement/edit',
+      //   component: contManagement,
+        
+      // }
     ]
   }
 
 
 
-
-  // {
-  // 	path: '/article',
-  // 	name: 'home',
-  // 	component: app,
-  // 	children: [{
-  // 		path: '/article/:id',
-  // 		component: homePage,
-  // 		children: [
-  // 			{
-  // 				path: 'Html5',
-  // 				name: 'Html5',
-  // 				component: homePage,
-  // 			},
-  // 			{
-  // 				path: 'css2',
-  // 				name: 'css2',
-  // 				component: homePage,
-  // 			},
-  // 			{
-  // 				path: 'javascript',
-  // 				name: 'javascript',
-  // 				component: homePage,
-  // 			}
-  // 		]
-  // 	},
-  // ]
-  // },
-  // {
-  // 	path: '/admin',
-  // 	name: 'admin',
-  // 	component: app,
-  // 	children: [{
-  // 		path: 'menuManagement',
-  // 		name: 'menuManagement',
-  // 		component: menuManagement,
-
-  // 	}]
-  // }
 
 ];
 

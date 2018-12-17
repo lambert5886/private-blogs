@@ -1,14 +1,16 @@
 <template>
   <div class="cont">
-    <Row :gutter="16"
+    <Row v-if="!current"
+         :gutter="16"
          :style="{'margin': '10px 0'}">
-      <Col span="3">
+      <Col span="2">
       &nbsp;
       </Col>
       <Col span="8">
       <div class="caozuo">
         <Button type="success"
                 @click="showAddNew">新增</Button>
+ 
       </div>
 
       </Col>
@@ -17,7 +19,7 @@
       </Col>
 
     </Row>
-    <Row>
+    <Row v-if="!current">
       <Col span="2">
       &nbsp;
       </Col>
@@ -25,14 +27,20 @@
       <Table border
              :columns="articleTitle"
              :data="articles"></Table>
+       <Page :total="articles.length "
+            :page-size="3"
+            :style="{'margin-top': '10px'}"
+            @on-change="changepage"></Page>
+
       </Col>
 
     </Row>
 
-    <Row>
+    <Row :style="{'margin-top': '20px'}" >
       <Col span="2"> &nbsp;
       </Col>
       <Col span="18">
+
       <component :is="current"
                  :saveUrl="url"
                  :data="editData"></component>
@@ -40,12 +48,14 @@
       </Col>
 
     </Row>
+
   </div>
 </template>
 
 <script>
 import addEditor from "@/components/text-editor";
 import { EventBus } from "@/tools";
+import urls from "@/pages/common/urlConfig";
 export default {
   data() {
     return {
@@ -121,23 +131,29 @@ export default {
   methods: {
     showAddNew() {
       this.$router.push({ path: "/admin/contManagement/add" });
-      this.url = "/content/saveArticle";
+      this.url = "saveArticle";
+      this.editData = {};
+    },
+    changepage(info){
+
     },
     articleEditor(info) {
-      this.$router.push({ path: "/admin/contManagement/editor" });
-      this.url = "/content/editArticle";
-
-      EventBus.$emit("editArticle", info.row);
+      this.$router.push({ path: "/admin/contManagement/edit" });
+      this.url = "editArticle";
+      console.log()
+      this.current = 'addEditor';
+      console.log('edit >>>> ', info.row)
+       this.editData = info.row;
     },
     getArticle() {
-      let params = {
-        title: "123"
-      };
+      this.current = '';
+      let _params = {};
+      _params.type = "getArticles";
 
       this.axios({
         method: "get",
-        url: "http://localhost:8099/content/article",
-        data: params
+        url: urls,
+        params: _params
       }).then(res => {
         this.articles = [];
 
@@ -147,15 +163,18 @@ export default {
     deleteArticle(info) {
       let _id = info.row._id;
       let _params = {};
-      _params.id = _id;
-
+      _params.data = {id: _id};
+      _params.type = "deleteArticle";
       this.axios({
         method: "post",
-        url: "http://localhost:8099/content/deleteArticle",
+        url: urls,
         data: _params
       }).then(res => {
         if (res.data.success) {
-          alert("删除成功!");
+          this.$Notice.success({
+            title: "删除成功!"
+          });
+
           this.getArticle();
         }
       });
@@ -163,7 +182,13 @@ export default {
   },
 
   beforeRouteUpdate(to, from, next) {
-    if (to.params.id == "add") this.current = addEditor;
+    console.log('beforeUpdate >>> ',to.params.id)
+    if (to.params.id == "list"){
+      this.current = '';
+    } else {
+      this.current = '';
+      this.current = addEditor;
+    }
 
     next();
   },
@@ -179,7 +204,7 @@ export default {
 
 div.caozuo {
   float: left;
-  margin-left: 15px;
+  /* margin-left: 15px; */
   margin-bottom: 10px;
 }
 
