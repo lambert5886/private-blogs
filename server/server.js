@@ -11,9 +11,10 @@ import mongoose from 'mongoose'
 import schema from '../glahplmodel/query';
 import contRoute from './router';
 
-var root = {
-  hello: () => 'hello world !'
-};
+import multipart  from 'connect-multiparty';
+
+
+ 
 
 var app = express();
 
@@ -21,6 +22,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
+let multipartMiddleware = multipart();
+
+app.post('/fileServer', multipartMiddleware, (req, res) => {
+  console.log(' get files >>>> ', req.files)
+})
 
 var router = express.Router();
 
