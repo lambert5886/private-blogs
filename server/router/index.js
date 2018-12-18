@@ -1,6 +1,8 @@
 import express from 'express';
 
-import types from '../../controllers'
+import types from '../../controllers';
+import fileServer from '../fileServer/';
+
 const Router = express.Router();
 
 Router.get('/blogsServer', (req, res, next) => {
@@ -44,9 +46,11 @@ Router.post('/blogsServer', (req, res, next) => {
 
 });
 
-Router.post('/fileServer', (req, res, next) => {
-
-  console.log('上传 >>>> ', req.headers);
+Router.post('/fileServer',fileServer.multipartMiddleware, (req, res, next) => {
+  console.log('fileServer >>>> ')
+   fileServer.getFiles(req, res).then( (result) => {
+    console.log('write  >>>> ', result);
+  })
   next();
 
 
