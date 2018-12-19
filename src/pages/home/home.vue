@@ -1,7 +1,11 @@
 <template>
   <div>
     <aritcleIndex></aritcleIndex>
-     <Upload action="http://localhost:8099/fileServer">
+     <Upload 
+        :data="datas"
+        
+        action="http://localhost:8099/fileServer">
+         <!-- type="drag" -->
         <Button type="ghost" icon="ios-cloud-upload-outline"> 上传 </Button>
     </Upload>
   </div>
@@ -13,7 +17,9 @@
 export default {
   data() {
     return {
-      
+      datas: {
+        name: 'hello'
+      }
     };
   },
   

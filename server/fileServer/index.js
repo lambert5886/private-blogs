@@ -11,12 +11,17 @@ const getFiles = async (req, res) => {
   let dirname = tools.formateDate('YYYY-MM-DD');
   let times = tools.formateDate('YYYY-MM-DD HH:MM:SS');
   let dirPath = __dirname + '/fileStore/'+ dirname;
- await fsPromise.mkdir(dirPath);
-  let _savePath = dirPath + '/' + times +'-' + _file.fieldName + _file.originalFilename;
-  console.log(' formateDate >>>>> ',  )
+ 
+ if(!fs.existsSync(dirPath)){
+  await fsPromise.mkdir(dirPath);
+ }
+    
+  
+  let _savePath = dirPath + '/' + times +'-'  + _file.originalFilename;
+ 
   let _data = await fsPromise.readFile(_file.path);
-  let _writeEnd = await fsPromise.writeFile(_savePath, _data);
-
+  let _writeEnd = await fsPromise.writeFile(_savePath, _data, );
+ 
   return _writeEnd;
 
 }
