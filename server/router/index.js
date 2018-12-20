@@ -47,12 +47,18 @@ Router.post('/blogsServer', (req, res, next) => {
 });
 
 Router.post('/fileServer',fileServer.multipartMiddleware, (req, res, next) => {
-  console.log('req body ', req.body)
+  console.log('req body ', req.files)
    fileServer.getFiles(req, res).then( function(){
      
-    console.log('then >>> ', req)
+    console.log('then >>> ', global.fileUrls)
+    res.json({
+      success: true,
+      url: global.fileUrls
+    })
+
+     next();
   })
-  next();
+ 
 
 
 });
