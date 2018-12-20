@@ -101,6 +101,7 @@
     "url-loader": "^0.5.9",
     "vue-axios": "^2.1.2",
     "vue-loader": "^13.7.0",
+    "vue-quill-editor": "^3.0.6",
     "vue-style-loader": "^3.0.3",
     "vue-template-compiler": "^2.5.13",
     "webpack": "^2.7.0",

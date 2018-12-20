@@ -7,33 +7,24 @@ import iView from 'iview'
 import '@/theme/index.less';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
+import  VueQuillEditor from 'vue-quill-editor';
+  
 
-import { ApolloClient } from 'apollo-client';
-import { HttpLink } from 'apollo-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import VueApollo from 'vue-apollo';
-import { ApolloLink } from 'apollo-link';
-
-const apiLink = new HttpLink({
-	uri: 'http://localhost:8099/graphql'
-});
-
-const apiClient = new ApolloClient({
-	link: apiLink,
-	cache: new InMemoryCache()
-});
-
-const apolloProvider = new VueApollo({
-	defaultClient: apiClient
-});
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 
 
+ 
+ 
+ 
 
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 Vue.use(VueRouter);
 Vue.use(iView);
 Vue.use(VueAxios, axios, axios_instance);
-Vue.use(VueApollo)
+
+Vue.use(VueQuillEditor)
 
 var axios_instance = axios.create({
 	
@@ -54,7 +45,7 @@ new Vue({
 	el: '#app',
 	router,
 	// store,
-	provide: apolloProvider.provide(),
+
 	render: h => h(App)
 
 });

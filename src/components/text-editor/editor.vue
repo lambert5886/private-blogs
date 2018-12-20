@@ -1,118 +1,94 @@
 <template>
+  <div>
+    <!-- quill-editor插件标签 分别绑定各个事件-->
+   <quill-editor ref="myTextEditor"
+              v-model="content"
+              :config="editorOption"
+              @blur="onEditorBlur($event)"
+              @focus="onEditorFocus($event)"
+              @ready="onEditorReady($event)">
+</quill-editor>
+    <div class="limit">当前已输入
+      <span>{{nowLength}}</span> 个字符，您还可以输入 <span>{{SurplusLength}}</span> 个字符。</div>
+    <!-- 文件上传input 将它隐藏-->
+    <!-- <el-upload class="upload-demo" :action="qnLocation" :before-upload='beforeUpload' :data="uploadData" :on-success='upScuccess'
+      ref="upload" style="display:none">
+      <el-button size="small" type="primary" id="imgInput" v-loading.fullscreen.lock="fullscreenLoading" element-loading-text="插入中,请稍候">点击上传</el-button>
+    </el-upload> -->
 
-  <div class='tinymce'>
-    <Button @click="backHandle"
-            :style="{'margin-bottom': '10px'}">
-      <Icon type="chevron-left"></Icon> 返回
-    </Button>
-    <Form :label-width="100"
-          label-position="left">
-      <FormItem label="标题">
-        <Input v-model="article.title"></Input>
-      </FormItem>
-      <FormItem label="关键词">
-        <Input v-model="article.keyWords"></Input>
-      </FormItem>
-      <FormItem label="简介">
-        <Input v-model="article.description"></Input>
-      </FormItem>
-    </Form>
-
-    <editor id='tinymce'
-            v-model='article.tinymceHtml'
-            :init='init'></editor>
-    <div v-html='article.tinymceHtml'></div>
-    <Button type="success"
-            @click="saveArticle">保存</Button>
+    <Upload :data="datas"
+            action="http://localhost:8099/fileServer">
+      <!-- type="drag" -->
+      <Button type="ghost"
+              icon="ios-cloud-upload-outline"> 上传 </Button>
+    </Upload>
+    </el-table>
   </div>
 </template>
-
 <script>
-import tinymce from "tinymce/tinymce";
-import "tinymce/themes/modern/theme";
-import Editor from "@tinymce/tinymce-vue";
-import "tinymce/plugins/image";
-import "tinymce/plugins/link";
-import "tinymce/plugins/code";
-import "tinymce/plugins/table";
-import "tinymce/plugins/lists";
-import "tinymce/plugins/contextmenu";
-import "tinymce/plugins/wordcount";
-import "tinymce/plugins/colorpicker";
-import "tinymce/plugins/textcolor";
+import { quillEditor } from "vue-quill-editor";
 
-import { EventBus } from "@/tools";
-import urls from "@/pages/common/urlConfig";
 export default {
-  name: "tinymce",
-  props: {
-    id: {
-      type: String
-    },
-    saveUrl: {
-      type: String
-    },
-    data: {
-      type: Object,
-      default: () => {}
-    }
-  },
   data() {
     return {
-      article: {
-        tinymceHtml: "请输入内容"
-      },
-
-      init: {
-        language_url: "/static/zh_CN.js",
-        language: "zh_CN",
-        skin_url: "/static/skins/lightgray",
-        height: 300,
-        plugins:
-          "link lists image code table colorpicker textcolor wordcount contextmenu",
-        toolbar:
-          "bold italic underline strikethrough | fontsizeselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent blockquote | undo redo | link unlink image code | removeformat",
-        branding: false
+      content: "hhh",
+      datas: {},
+      nowLength: "",
+      SurplusLength: "",
+      editorOption: {
+        debug: "info",
+        modules: {
+          toolbar: "#toolbar",
+          handlers: {
+                'image': function (value) {
+                  if (value) {
+                    console.log('  click >>>> ')
+                  } else {
+                    console.log(' no click >>>> ')
+                    this.quill.format('image', false);
+                  }
+                }
+           }
+        },
+        placeholder: "Compose an epic...",
+        readOnly: true,
+        theme: "snow"
       }
     };
   },
-  mounted() {
-    tinymce.init({});
-    this.article = Object.assign({}, this.data);
-  },
-  watch: {
-    $route: function() {}
+  mounted(){
+    // console.log( 'mounted >>> ', this.$refs.myTextEditor)
+    // let  toolbar = this.editor.getModule('toolbar');
+     
+    //   toolbar.addHandler('image', () => {
+    //     console.log(' click >>>>')
+    //     document.getElementsByClassName('ql-image')[0].click();
+    //   })
   },
   methods: {
-    backHandle() {
-      this.$router.push({ path: "/admin/contManagement/list" });
+    onEditorBlur(editor) {
+      console.log('editor blur!', editor)
     },
-    editHandle(info) {
-      console.log("edit info >>> ", info);
-      this.article = Object.assign({}, info);
-
-      console.log(" article >>>> ", this.article);
+    onEditorFocus(editor) {
+      console.log('editor focus!', editor)
     },
-    saveArticle() {
-      let _data = this.article;
-      delete _data._index;
-      delete _data._rowKey;
-      console.log(this.saveUrl, "提交地址");
-      let params = {};
-      params.type = this.saveUrl;
-      params.data = _data;
-      let _url = urls;
-      this.axios({
-        method: "post",
-        url: _url,
-        data: params
-      }).then(res => {
-        if (res.data.success) {
-          EventBus.$emit("changeArticle");
-        }
-      });
+    onEditorReady(editor) {
+      console.log('editor ready!', editor)
+      
+    },
+    onEditorChange({ editor, html, text }) {
+      // console.log('editor change!', editor, html, text)
+      this.content = html
     }
   },
-  components: { Editor }
+   computed: {
+        editor() {
+      return this.$refs.myTextEditor.quillEditor
+    }
+    },
+    
+  components: {
+    quillEditor
+  }
 };
 </script>
