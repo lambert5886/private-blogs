@@ -40,7 +40,7 @@
 </template>
 <script>
 import { quillEditor } from "vue-quill-editor";
-import { reject } from 'async';
+import { reject } from "async";
 
 export default {
   data() {
@@ -49,7 +49,7 @@ export default {
       datas: {},
       nowLength: "",
       SurplusLength: "",
-      uniqueId: 'uniqueId',
+      uniqueId: "uniqueId",
       editorOption: {
         debug: "info",
         modules: {
@@ -88,16 +88,15 @@ export default {
       // console.log('editor change!', editor, html, text)
       this.content = html;
     },
-    uploadImg:  function(id) {
+    uploadImg: function(id) {
       var vm = this;
       vm.imageLoading = true;
       let _form = document.getElementById(id);
       var formData = new FormData(_form);
       try {
-        const url =  vm.uploadImgReq(formData); // 自定义的图片上传函数
-        console.log('urls >>>> ', url)
+        const url = vm.uploadImgReq(formData); // 自定义的图片上传函数
+        console.log("urls >>>> ", url);
         if (url != null && url.length > 0) {
-         
         } else {
           // vm.$message.warning("图片增加失败");
         }
@@ -108,29 +107,28 @@ export default {
       }
       vm.imageLoading = false;
     },
-    uploadImgReq(data){
+    uploadImgReq(data) {
       let url = null;
       let vm = this;
       this.axios({
-        method: 'post',
-        url: 'http://localhost:8099/fileServer',
-        headers: {'content-type': 'multipart/form-data'},
-        data: data,
-      }).then( res => {
-        console.log('res', res)
+        method: "post",
+        url: "http://localhost:8099/fileServer",
+        headers: { "content-type": "multipart/form-data" },
+        data: data
+      }).then(res => {
+        console.log("res", res);
         url = res.data.url;
 
-         var value = url;
-          vm.addImgRange = vm.$refs.myTextEditor.quill.getSelection();
-          value = value.indexOf("http") != -1 ? value : "http://localhost:8099" + value;
-          vm.$refs.myTextEditor.quill.insertEmbed(
-            vm.addImgRange != null ? vm.addImgRange.index : 0,
-            "image",
-            value,
-             
-          );
-      })
- 
+        var value = url;
+        vm.addImgRange = vm.$refs.myTextEditor.quill.getSelection();
+        value =
+          value.indexOf("http") != -1 ? value : "http://localhost:8099" + value;
+        vm.$refs.myTextEditor.quill.insertEmbed(
+          vm.addImgRange != null ? vm.addImgRange.index : 0,
+          "image",
+          value
+        );
+      });
     }
   },
   computed: {

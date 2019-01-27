@@ -14,7 +14,12 @@
                     最新文章
                   </p>
                   <Col span="24">
-                      <detail></detail>
+                      <detail>
+                            <readInfo slot="footInfo"></readInfo>
+                      </detail>
+                        <detail>
+                            <readInfo slot="footInfo"></readInfo>
+                      </detail>
                   </Col>
               </Row>
               <Row :gutter="3" :style="{'margin-top': '15px'}">
@@ -36,6 +41,9 @@
 import card from "@/components/card";
 import sideList from '@/pages/sidebar';
 import detail from '@/components/detail';
+import readInfo from '@/components/readInfo';
+import urls from "@/pages/common/urlConfig";
+console.log('readInfo >>> ', readInfo)
 export default {
   data() {
     return {
@@ -52,9 +60,14 @@ export default {
   },
   methods: {
     getArticle() {
+      let _params = {};
+      _params.type = 'getArticles';
+
       this.axios({
         method: "get",
-        url: "http://localhost:8099/content/article"
+        url: urls,
+        params: _params
+
       }).then(res => {
         console.log(" 响应 >>> ", res);
         this.cardLists = res.data.data;
@@ -74,7 +87,8 @@ export default {
   components: {
     card,
     sideList,
-    detail
+    detail,
+    readInfo
   }
 };
 </script>

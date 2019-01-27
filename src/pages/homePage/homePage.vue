@@ -16,11 +16,8 @@
 <script>
 import HeadNav from "@/components/header";
 import home from "@/pages/home";
-// import Html5 from "@/pages/html5";
-// import css3 from "@/pages/css3";
-// import javascript from "@/pages/javascript";
-
-import gql from "@/apollo";
+import urls from "@/pages/common/urlConfig";
+ 
 
 export default {
   data() {
@@ -49,27 +46,16 @@ export default {
   },
   methods: {
     getMenus() {
-      let _params ={
-          query: `{
-                getMenus  {
-                      title,
-                      id,
-                      menuType,
-                      path,
-                      childrenList{
-                        title,
-                        path
-                      }
-                  }
-                }  `
-      };
+      let _params ={};
+      _params.type = 'getMenu';
       this.axios({
         method: "POST",
-        url: "http://localhost:8099/graphql",
+        url: urls,
+
         data: _params,
       }).then(res => {
-        let _datas = res.data.data.getMenus;
-        console.log('query >>> ',res.data.data.getMenus)
+        let _datas = res.data.data;
+        console.log('query >>> ',res.data.data)
         this.headNavLists = [];
         for(let i = 0; i < _datas.length; i++){
           if(_datas[i].menuType == '0'){
