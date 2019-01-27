@@ -10,7 +10,7 @@
       <div class="caozuo">
         <Button type="success"
                 @click="showAddNew">新增</Button>
- 
+
       </div>
 
       </Col>
@@ -27,7 +27,7 @@
       <Table border
              :columns="articleTitle"
              :data="articles"></Table>
-       <Page :total="articles.length "
+      <Page :total="articles.length "
             :page-size="3"
             :style="{'margin-top': '10px'}"
             @on-change="changepage"></Page>
@@ -35,8 +35,36 @@
       </Col>
 
     </Row>
+    <div v-if="current"
+         class="from-wrap">
+      <Row>
+        <Col span="2">
+        &nbsp;</Col>
+        <Col span="18">
+        <Form :label-width="120">
+          <FormItem label="标题">
+            <Input v-model="aticleModel.title"></Input>
+          </FormItem>
+          <FormItem label="关键词">
+            <Input v-model="aticleModel.keyWords"></Input>
+          </FormItem>
+             <FormItem label="简介">
+            <Input v-model="aticleModel.description"></Input>
+          </FormItem>
+          <FormItem label="标签">
+            <Select v-model="aticleModel.tag"
+                    style="width:200px">
+              <Option v-for="(item, index) in tagList"
+                      :value="item.value"
+                      :key="item.index">{{ item.title }}</Option>
+            </Select>
+          </FormItem>
+        </Form>
+        </Col>
+      </Row>
+    </div>
 
-    <Row :style="{'margin-top': '20px'}" >
+    <Row :style="{'margin-top': '20px'}">
       <Col span="2"> &nbsp;
       </Col>
       <Col span="18">
@@ -54,13 +82,26 @@
 
 <script>
 import addEditor from "@/components/text-editor";
-import { EventBus } from "@/tools";
+import { EventBus, articleId } from "@/tools";
 import urls from "@/pages/common/urlConfig";
 export default {
   data() {
     return {
-      current: "",
+      current: "addEditor",
       url: "",
+      aticleModel: {},
+      tagList: [{
+        value: 0,
+        title: 'HTML',
+      },
+      {
+        value: 1,
+        title: 'CSS',
+      },
+      {
+        value: 2,
+        title: 'JS',
+      }],
       articleTitle: [
         {
           title: "标题",
@@ -127,26 +168,54 @@ export default {
   mounted() {
     this.getArticle();
     EventBus.$on("changeArticle", this.getArticle);
+    EventBus.$on('saveArticle', this.saveAritcleHandle);
   },
   methods: {
+    saveAritcleHandle(info){
+      console.log('save article >>>>',this.aticleModel, info, articleId());
+      let _params = {};
+        
+          _params.type =  'saveArticle';
+      let _data = {};
+        _data.articleId = articleId();
+          _data.tinymceHtml = info;
+      let _footInfo = {
+        tag: this.aticleModel.tag,
+        articleId: _data.articleId,
+        time: articleId('-'),
+        read: 0,
+        love: 0,
+
+      }    
+          _data = Object.assign({}, _data, this.aticleModel, {footInfo: _footInfo});
+          _params.data = _data;
+
+      this.axios({
+        method: 'post',
+        url: urls,
+        type: 'saveArticle',
+        data: _params
+      }).then( res => {
+        console.log( ' 保存 文章 >>> ', res.data)
+      })
+
+    },
     showAddNew() {
       this.$router.push({ path: "/admin/contManagement/add" });
       this.url = "saveArticle";
       this.editData = {};
     },
-    changepage(info){
-
-    },
+    changepage(info) {},
     articleEditor(info) {
       this.$router.push({ path: "/admin/contManagement/edit" });
       this.url = "editArticle";
-      console.log()
-      this.current = 'addEditor';
-      console.log('edit >>>> ', info.row)
-       this.editData = info.row;
+      console.log();
+      this.current = "addEditor";
+      console.log("edit >>>> ", info.row);
+      this.editData = info.row;
     },
     getArticle() {
-      this.current = '';
+      this.current = "";
       let _params = {};
       _params.type = "getArticles";
 
@@ -163,7 +232,7 @@ export default {
     deleteArticle(info) {
       let _id = info.row._id;
       let _params = {};
-      _params.data = {id: _id};
+      _params.data = { id: _id };
       _params.type = "deleteArticle";
       this.axios({
         method: "post",
@@ -182,11 +251,11 @@ export default {
   },
 
   beforeRouteUpdate(to, from, next) {
-    console.log('beforeUpdate >>> ',to.params.id)
-    if (to.params.id == "list"){
-      this.current = '';
+    console.log("beforeUpdate >>> ", to.params.id);
+    if (to.params.id == "list") {
+      this.current = "";
     } else {
-      this.current = '';
+      this.current = "";
       this.current = addEditor;
     }
 

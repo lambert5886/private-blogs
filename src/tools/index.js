@@ -21,9 +21,25 @@ const times =  function(time){
 	return {minutes: _minutes, seconds: _seconds};
 }
 
+const articleId = (info) => {
+	let date = new Date();
+	let _year = date.getFullYear(),
+		_month = date.getMonth(),
+		_hours = date.getHours(),
+		_minutes = date.getMinutes(),
+		_seconds = date.getMilliseconds();
+		console.log(_year, _month, _hours, _minutes, _seconds)
+		if(info){
+			return _year + info + _month +  info + _hours + ':' + _minutes + info + _seconds;
+		}else{
+			return   _year + '' + _month +  '' + _hours +  '' + _minutes +  '' + _seconds;
+		}
+	
+}
+
 const EventBus = new Vue();
 
-export {times, EventBus} ;
+export {times, EventBus, articleId} ;
 
 
 function startTime(){

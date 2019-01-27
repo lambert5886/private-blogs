@@ -1,14 +1,18 @@
 import {
-  articleModel
+  articleModel,
+  footInfoModel
 } from '../mongoose/model';
-
+ 
 
 const saveArticle = async (req, res, next) => {
   const opts = req.body.data;
-
+  const _footInfo = opts.footInfo;
+  console.log( 'opts save >>>', opts )
   const article = new articleModel(opts);
 
+  const footInfo = new footInfoModel(_footInfo);
   const saveArticle = await article.save();
+  const saveFootInfo = await footInfo.save();
 
   return saveArticle;
 

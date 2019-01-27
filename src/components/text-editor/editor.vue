@@ -28,7 +28,9 @@
              @change="uploadImg('uploadFormMulti')">
       <!--style="display: none"-->
     </form>
-
+    <Button @click="saveArticleHandle">
+      保存
+    </Button>
     <Upload :data="datas"
             action="http://localhost:8099/fileServer">
       <!-- type="drag" -->
@@ -41,11 +43,11 @@
 <script>
 import { quillEditor } from "vue-quill-editor";
 import { reject } from "async";
-
+import { EventBus } from '@/tools';
 export default {
   data() {
     return {
-      content: "hhh",
+      content: "请输入内容!",
       datas: {},
       nowLength: "",
       SurplusLength: "",
@@ -75,6 +77,9 @@ export default {
       .addHandler("image", imgHandler);
   },
   methods: {
+    saveArticleHandle(){
+      EventBus.$emit('saveArticle', this.content);
+    },
     onEditorBlur(editor) {
       console.log("editor blur!", editor);
     },

@@ -1,5 +1,5 @@
 import articleModel from './article';
 import menuModel from './menu';
-import tagModel from './tag';
+import footInfoModel from './footinfo';
 
-export {articleModel, menuModel, tagModel };
+export {articleModel, menuModel, footInfoModel };

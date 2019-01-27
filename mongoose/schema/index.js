@@ -1,11 +1,9 @@
 import articleSchema from './article';
 import menuSchema from './menu';
-import {
-  tagSchema
-} from './tag';
-
+import footInfoSchema from './footinfo';
+ 
 export {
   articleSchema,
   menuSchema,
-  tagSchema
+  footInfoSchema
 };

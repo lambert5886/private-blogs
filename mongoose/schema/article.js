@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const articleSchema = new Schema({
     title: String,
     keyWords: String,
-   
+    articleId: String,
     description: String,
     tinymceHtml: String,
     meta: {
