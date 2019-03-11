@@ -1,28 +1,41 @@
 <template>
     <div class="read-info-wrap">
         <p class="tag">
-           <Icon type="ios-pricetag"></Icon> html
+           <Icon type="ios-pricetag"></Icon>{{ readInfo.tag }}
         </p>
         <p class="time">
-           <Icon type="ios-time"></Icon> 2019-01-12
+           <Icon type="ios-time"></Icon>{{ readInfo.time }}
         </p>
         <p class="read">
-           <Icon type="eye"></Icon> 浏览(444)
+           <Icon type="eye"></Icon> 浏览({{ readInfo.read }})
         </p>
         <p class="love">
-           <Icon type="android-favorite"></Icon> 喜欢(30)
+           <Icon type="android-favorite"></Icon> 喜欢({{ readInfo.love }})
         </p>
 
-        <p class="read-all">
+        <p class="read-all" @click="goTodetailHandle">
             阅读全文
         </p>
     </div>
 </template>
 <script>
+import { EventBus } from '@/tools';
 export default {
+    props: {
+        readInfo: {
+            type: Object,
+            default: () => {}
+        }
+    },
     data(){
         return {}
+    },
+    methods: {
+        goTodetailHandle(){
+            EventBus.$emit('goToDetail', this.readInfo);
+        }
     }
+
 }
 </script>
 <style lang="less" scoped>
@@ -56,7 +69,10 @@ export default {
     }
     @{deep} p.read-all{
         position: absolute;
-        right: 0;
+        right: 10px;
+    }
+    @{deep} p.read-all:hover{
+        cursor: pointer;
     }
 }
 </style>

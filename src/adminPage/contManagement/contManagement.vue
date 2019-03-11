@@ -9,6 +9,7 @@
       <Col span="8">
       <div class="caozuo">
         <Button type="success"
+                class="cao-button"
                 @click="showAddNew">新增</Button>
 
       </div>
@@ -37,6 +38,8 @@
     </Row>
     <div v-if="current"
          class="from-wrap">
+      <Button style="margin-left: 30px;margin-top:20px;"
+              @click="goBackHandle">返回</Button>
       <Row>
         <Col span="2">
         &nbsp;</Col>
@@ -48,7 +51,7 @@
           <FormItem label="关键词">
             <Input v-model="aticleModel.keyWords"></Input>
           </FormItem>
-             <FormItem label="简介">
+          <FormItem label="简介">
             <Input v-model="aticleModel.description"></Input>
           </FormItem>
           <FormItem label="标签">
@@ -87,21 +90,24 @@ import urls from "@/pages/common/urlConfig";
 export default {
   data() {
     return {
+      name: "contManagement",
       current: "addEditor",
       url: "",
       aticleModel: {},
-      tagList: [{
-        value: 0,
-        title: 'HTML',
-      },
-      {
-        value: 1,
-        title: 'CSS',
-      },
-      {
-        value: 2,
-        title: 'JS',
-      }],
+      tagList: [
+        {
+          value: 0,
+          title: "HTML"
+        },
+        {
+          value: 1,
+          title: "CSS"
+        },
+        {
+          value: 2,
+          title: "JS"
+        }
+      ],
       articleTitle: [
         {
           title: "标题",
@@ -168,37 +174,40 @@ export default {
   mounted() {
     this.getArticle();
     EventBus.$on("changeArticle", this.getArticle);
-    EventBus.$on('saveArticle', this.saveAritcleHandle);
+    EventBus.$on("saveArticle", this.saveAritcleHandle);
   },
   methods: {
-    saveAritcleHandle(info){
-      console.log('save article >>>>',this.aticleModel, info, articleId());
+    goBackHandle() {
+      this.$router.push({ path: "/admin/contManagement/list" });
+    },
+    saveAritcleHandle(info) {
+      console.log("save article >>>>", this.aticleModel, info, articleId());
       let _params = {};
-        
-          _params.type =  'saveArticle';
+
+      _params.type = "saveArticle";
       let _data = {};
-        _data.articleId = articleId();
-          _data.tinymceHtml = info;
+      _data.articleId = articleId();
+      _data.tinymceHtml = info;
       let _footInfo = {
         tag: this.aticleModel.tag,
         articleId: _data.articleId,
-        time: articleId('-'),
+        time: articleId("-"),
         read: 0,
-        love: 0,
-
-      }    
-          _data = Object.assign({}, _data, this.aticleModel, {footInfo: _footInfo});
-          _params.data = _data;
+        love: 0
+      };
+      _data = Object.assign({}, _data, this.aticleModel, {
+        footInfo: _footInfo
+      });
+      _params.data = _data;
 
       this.axios({
-        method: 'post',
+        method: "post",
         url: urls,
-        type: 'saveArticle',
+        type: "saveArticle",
         data: _params
-      }).then( res => {
-        console.log( ' 保存 文章 >>> ', res.data)
-      })
-
+      }).then(res => {
+        console.log(" 保存 文章 >>> ", res.data);
+      });
     },
     showAddNew() {
       this.$router.push({ path: "/admin/contManagement/add" });

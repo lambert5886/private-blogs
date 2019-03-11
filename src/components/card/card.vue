@@ -60,6 +60,7 @@ export default {
   box-shadow: 0px 0px 0px #ccc;
   transition: box-shadow 1s;
   padding-bottom: 10px;
+  margin-bottom: 10px;
 }
 .card-wrapper:hover{
     cursor: pointer;

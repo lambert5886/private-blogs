@@ -29,6 +29,10 @@ export default {
     .item-wrapper{
         width: 100%;
         font-size: 16px;
+        padding: 10px;
+    }
+    .item-wrapper:hover{
+        box-shadow: 1px 1px 7px #ccc;
     }
     h2{
         font-size: 18px;
