@@ -50,7 +50,7 @@ import detail from "@/components/detail";
 import readInfo from "@/components/readInfo";
 import urls from "@/pages/common/urlConfig";
 import { EventBus } from "@/tools";
-console.log("readInfo >>> ", readInfo);
+
 export default {
   data() {
     return {

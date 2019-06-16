@@ -164,7 +164,7 @@ export default {
           width: 100,
           render: (h, params) => {
             let _id = params.row.parentId;
-            console.log(_id, "_id");
+      
             if (_id != undefined) {
               let _start = _id.substring(0, 4);
               let _end = _id.substring(_id.length - 4, _id.length);
@@ -270,6 +270,7 @@ export default {
         this.menuList = [];
         let _data = res.data.data;
         this.menuListBase = [];
+        this.currentPage = 1;
         for (let i = 0; i < _data.length; i++) {
           if (_data[i].childrenList.length) {
             for (let k = 0; k < _data[i].childrenList.length; k++) {
@@ -287,12 +288,14 @@ export default {
       let _opts = this.formItem;
       delete _opts._index;
       delete _opts._rowKey;
-      console.log("edit menu >>>>  ", _opts);
+     
       let _params = {
         type: "editMenu",
         data: _opts
       };
+       console.log("edit menu >>>>  ", _params);
       this.axios({
+        method: 'post',
         url: urls,
         data: _params
       }).then(res => {
