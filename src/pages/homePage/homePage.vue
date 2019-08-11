@@ -2,23 +2,21 @@
   <div>
     <Header>
       <HeadNav :menuList='headNavLists'></HeadNav>
-
     </Header>
-    <content>
-      <home></home>
-      <!-- <component :is="currentComponent"></component> -->
-      <!-- <router-view></router-view> -->
+    <content style="float: left;width: 80%;">
+      <router-view></router-view>
     </content>
-    <!--  -->
+     <div style="float: right; width: 20%;">
+        <sideList></sideList>
+     </div>
   </div>
 </template>
-
 <script>
 import HeadNav from "@/components/header";
+import sideList from "@/pages/sidebar";
 import home from "@/pages/home";
 import urls from "@/pages/common/urlConfig";
  
-
 export default {
   data() {
     return {
@@ -26,21 +24,16 @@ export default {
       headNavLists: []
     };
   },
-
   mounted() {
     this.getMenus();
   },
-
   beforeRouteUpdate(to, from, next) {
     this.current = to.params.id;
     console.log("from homepage  :::  ", this.$route.params.id, to.params.id);
     next();
   },
-
   components: {
-    // Html5,
-    // css3,
-    // javascript,
+    sideList,
     home,
     HeadNav
   },
@@ -51,7 +44,6 @@ export default {
       this.axios({
         method: "POST",
         url: urls,
-
         data: _params,
       }).then(res => {
         let _datas = res.data.data;
@@ -61,28 +53,9 @@ export default {
           if(_datas[i].menuType == '0'){
             this.headNavLists.push(_datas[i]);
           }
-        }
-
-        ;
+        };
       });
     }
-
-    // getMenus() {
-    //   this.$apollo
-    //     .query({
-    //       query: gql.workorder
-    //     })
-    //     .then(res => {
-    //       let _datas = res.data.getMenus;
-    //       this.headNavLists = [];
-    //       for (let i = 0; i < _datas.length; i++) {
-    //         if (_datas[i].menuType == "0") {
-    //           this.headNavLists.push(_datas[i]);
-    //         }
-    //       }
-    //       console.log(this.headNavLists);
-    //     });
-    // }
   },
   computed: {
     currentComponent() {

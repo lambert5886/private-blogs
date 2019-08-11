@@ -8,7 +8,9 @@ import '@/theme/index.less';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import  VueQuillEditor from 'vue-quill-editor';
-  
+import { EventBus } from "@/tools";
+
+window.EventBus = EventBus;  
 
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'

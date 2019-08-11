@@ -15,14 +15,15 @@
             最新文章
           </p>
           <Col span="24">
-          <detail>
-            <readInfo slot="footInfo"
-                      :readInfo="read"></readInfo>
-          </detail>
-          <detail>
-            <readInfo slot="footInfo"
-                      :readInfo="read"></readInfo>
-          </detail>
+          <div class="details"
+               v-for="(item, index) in cardLists"
+               :key="index">
+            <detail :detail="item">
+              <readInfo slot="footInfo"
+                        :readInfo="read"></readInfo>
+            </detail>
+          </div>
+
           </Col>
         </Row>
         <Row :gutter="3"
@@ -31,25 +32,16 @@
           <Page :total="10"></Page>
           </Col>
         </Row>
-
       </content>
-      <Sider :style="{'min-width': '400px'}"
-             class="sider-wrap"
-             hide-trigger>
-        <sideList></sideList>
-      </Sider>
     </Layout>
-
   </div>
 </template>
 
 <script>
 import card from "@/components/card";
-import sideList from "@/pages/sidebar";
 import detail from "@/components/detail";
 import readInfo from "@/components/readInfo";
 import urls from "@/pages/common/urlConfig";
-import { EventBus } from "@/tools";
 
 export default {
   data() {
@@ -65,16 +57,20 @@ export default {
     };
   },
   mounted() {
-    EventBus.$on('goToDetail', this.goDetailHandle)
+    EventBus.$on("goToDetail", this.goDetailHandle);
+    EventBus.$on("goToList", this.goToListHandle);
     this.getArticle();
-    
   },
   beforeUpdate() {
     console.log(this.$route.params.id, " id >>>> ");
   },
   methods: {
-    goDetailHandle(info){
+    goDetailHandle(info) {
       console.log(" get Info >>> ", info);
+      this.$router.push({ path: "/aritcle/detail/" });
+    },
+    goToListHandle(info) {
+      this.$router.push({ path: "/aritcle/list/" });
     },
     getArticle() {
       let _params = {};
@@ -85,24 +81,18 @@ export default {
         url: urls,
         params: _params
       }).then(res => {
-        console.log(" 响应 >>> ", res);
         this.cardLists = res.data.data;
       });
     }
   },
-  // [{
-  //                 title: '标题标题',
-  //                 description: '内容简介内容简介',
-  //                 imgSrc: require('@/assets/b04.jpg'),
-  //                 path: '',
-  //                 linkTitle: '阅读原文'
-  //             },
-  //           ]
+  destroyed() {
+    EventBus.$off("goToDetail");
+    EventBus.$off("goToList");
+  },
 
   computed: {},
   components: {
     card,
-    sideList,
     detail,
     readInfo
   }

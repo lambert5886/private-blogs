@@ -1,12 +1,12 @@
 <template>
     <div class="item-wrapper">
-        <h2>6条网页设计配色原则,让你秒变配色高手</h2>
+        <h2 @click="goToDetailHandle">{{detail.title}}</h2>
         <div class="description">
             <span class="articleImg">
 
             </span>
             <span class="des">
-                网页设计好不好看,颜色是毋庸置疑要排首位的,所以关于颜色的搭配技巧以及原则,对
+                {{detail.description}}
             </span>
         </div>
         <slot name="footInfo"></slot>
@@ -16,20 +16,29 @@
 <script>
 export default {
     props: {
-        title: {
-            type: String,
+        detail: {
+            type: Object,
+            default: () => {}
         }
     },
     data(){
         return {}
+    },
+    methods: {
+        goToDetailHandle(){
+            EventBus.$emit('goToDetail');
+        }
     }
 }
 </script>
-<style scoped>
+<style lang="less"scoped>
     .item-wrapper{
         width: 100%;
         font-size: 16px;
         padding: 10px;
+        h2:hover{
+            cursor: pointer;
+        }
     }
     .item-wrapper:hover{
         box-shadow: 1px 1px 7px #ccc;

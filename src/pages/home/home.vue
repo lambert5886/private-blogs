@@ -1,13 +1,13 @@
 <template>
   <div>
-    <aritcleIndex></aritcleIndex>
-     <Upload 
+    <!-- <aritcleIndex></aritcleIndex> -->
+     <!-- <Upload 
         :data="datas"
         
         action="http://localhost:8099/fileServer">
-         <!-- type="drag" -->
+         <!-- type="drag" 
         <Button type="ghost" icon="ios-cloud-upload-outline"> 上传 </Button>
-    </Upload>
+    </Upload> -->
   </div>
    
 </template>

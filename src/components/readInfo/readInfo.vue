@@ -1,6 +1,6 @@
 <template>
     <div class="read-info-wrap">
-        <p class="tag">
+        <p @click="goToListHandle" class="tag">
            <Icon type="ios-pricetag"></Icon>{{ readInfo.tag }}
         </p>
         <p class="time">
@@ -18,8 +18,7 @@
         </p>
     </div>
 </template>
-<script>
-import { EventBus } from '@/tools';
+<script> 
 export default {
     props: {
         readInfo: {
@@ -33,6 +32,9 @@ export default {
     methods: {
         goTodetailHandle(){
             EventBus.$emit('goToDetail', this.readInfo);
+        },
+        goToListHandle(){
+            EventBus.$emit('goToList', this.readInfo);
         }
     }
 
@@ -60,6 +62,9 @@ export default {
         i{
             color: #f8a8a8;
         }
+    }
+    @{deep} p.tag:hover{
+        cursor: pointer;
     }
 
     @{deep} p.read{
