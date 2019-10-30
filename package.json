@@ -84,7 +84,7 @@
     "less": "^3.7.1",
     "less-loader": "^4.1.0",
     "mocha": "^3.2.0",
-    "mongoose": "^5.3.7",
+    "mongoose": "^5.7.5",
     "nightwatch": "^0.9.12",
     "opn": "^5.2.0",
     "optimize-css-assets-webpack-plugin": "^2.0.0",
